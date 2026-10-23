@@ -18,7 +18,7 @@ npm run build
 npm run preview
 ```
 
-A prévia de produção usa **http://127.0.0.1:4173**. O resultado está em `dist/`. Nenhuma publicação, integração externa ou push foi configurado/executado.
+A prévia de produção usa **http://127.0.0.1:4173**. O resultado está em `dist/`. A integração com Vercel Web Analytics está preparada para o deployment; esta alteração não executa publicação ou push.
 
 Com a prévia de produção em execução, `npm run test:production` verifica o bundle gerado, os quatro projetos, a política de segurança e a ausência de requisições a terceiros.
 
@@ -140,7 +140,17 @@ Para regenerar os SVGs após editar seu desenho: `node scripts/generate-feathers
 
 ## Privacidade e segurança
 
-Site estático, sem formulário, backend, analytics, cookies de rastreamento, credenciais ou scripts de terceiros. Fontes e ilustrações são locais. Somente a preferência de tema é gravada no navegador. Os contatos fornecidos são deliberadamente parte do conteúdo público; não são segredos.
+Site estático, sem formulário, backend próprio ou credenciais no cliente. Fontes e ilustrações são locais. A preferência de tema é gravada no navegador. O site publicado inclui Vercel Web Analytics para métricas de visita; os contatos fornecidos são deliberadamente parte do conteúdo público e não são segredos.
+
+### Vercel Web Analytics
+
+`@vercel/analytics` está integrado em `src/main.tsx` por meio de `<Analytics mode="production" />`. O componente é habilitado no build de produção, exceto nos endereços locais `localhost`, `127.0.0.1` e `[::1]`. Assim, `npm run dev` e `npm run preview` local não enviam visitas nem tentam buscar um endpoint inexistente no Vite. Não é necessário colocar token ou ID de projeto no código.
+
+No painel da Vercel, abra o projeto e habilite **Analytics → Enable**. Depois publique um novo deployment contendo esta integração e visite sua URL. Aguarde a atualização do painel; se não houver dados, verifique bloqueadores e a requisição `/_vercel/insights/script.js` na aba Network do navegador. Essa etapa remota não é comprovada pelos testes locais. Consulte a [documentação oficial](https://vercel.com/docs/analytics/quickstart).
+
+O script e os endpoints de coleta usam a mesma origem do deployment, compatíveis com `script-src 'self'` e `connect-src 'self'`. `vercel.json` replica os cabeçalhos de segurança de `public/_headers`, pois a Vercel utiliza sua própria configuração. Mantenha as duas políticas sincronizadas ao alterá-las. Outra hospedagem exige suporte próprio aos endpoints do Analytics ou a remoção/desativação do componente.
+
+O portfólio possui uma única página com seções por âncoras. Navegar para `#projetos` ou `#contato` não representa uma nova página; eventos específicos de cliques não foram adicionados.
 
 Links editáveis aceitam HTTPS, e-mail válido e caminhos locais; protocolos executáveis e URLs com credenciais são omitidos. Links externos usam `noopener noreferrer`. Source maps de produção estão desativados. `.env`, dependências e artefatos de testes são ignorados pelo Git.
 

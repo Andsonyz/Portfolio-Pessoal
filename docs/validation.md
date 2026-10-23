@@ -1,5 +1,15 @@
 # Relatório de validação — Atualização 3 — 22/10/2026
 
+## Complemento — Vercel Analytics — 23/10/2026
+
+Validação desta alteração: `npm run lint`, `npm run build` e `npm run format:check` aprovados; `npm test -- --reporter=line` concluiu os 29 cenários com sucesso em 3,2 minutos.
+
+Integração do pacote já instalado `@vercel/analytics` em `src/main.tsx`, com `<Analytics mode="production" />` somente em build de produção fora de localhost. `vercel.json` replica os cabeçalhos de `public/_headers` para o host Vercel. A CSP continua restrita à própria origem para scripts e coleta, sem liberar domínios adicionais. README atualizado com ativação no painel e publicação posterior.
+
+As verificações locais anteriores de ausência de requisições externas continuam válidas para localhost, onde Analytics está desativado. No deployment há coleta de visitas pelo Vercel Web Analytics. A ativação do serviço, o recebimento de dados no painel e os cabeçalhos HTTP efetivos dependem de um novo deployment; não foram verificados remotamente e nenhuma publicação foi executada nesta alteração.
+
+Verificação adicional com o bundle compilado em Edge: uma simulação local de origem publicada carregou exatamente um script `/_vercel/insights/script.js`; na origem `127.0.0.1`, nenhum script de Analytics foi solicitado. Não houve erros de console/CSP. O endpoint foi substituído por um script de prova local, portanto esse ensaio valida a integração e não o recebimento de visitas pela Vercel. Evidência reproduzível em `.verification/check-analytics.mjs`.
+
 ## Escopo entregue
 
 Atualização do portfólio existente, preservando React + TypeScript estrito + Vite + Tailwind CSS v4, GSAP, as nove seções, o monograma AR, os dados confirmados e a interface monocromática. Nenhuma dependência foi adicionada, nenhum site foi publicado e nenhum push foi executado.
