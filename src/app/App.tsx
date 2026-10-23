@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/react'
 import { PreferencesProvider } from './PreferencesProvider'
 import { Header } from '../components/navigation/Header'
 import { Footer } from '../components/layout/Footer'
@@ -33,7 +32,6 @@ export function App() {
         </main>
         <Footer />
       </PageMotion>
-      <Analytics />
     </PreferencesProvider>
   )
 }

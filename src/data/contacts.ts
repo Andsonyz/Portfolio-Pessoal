@@ -1,4 +1,4 @@
-import { SiGithub, SiDiscord, SiWhatsapp } from 'react-icons/si'
+import { SiGithub, SiDiscord, SiWhatsapp, SiInstagram } from 'react-icons/si'
 import { FaLinkedinIn } from 'react-icons/fa6'
 import { Mail } from 'lucide-react'
 
@@ -28,5 +28,11 @@ export const contacts = [
     detail: 'Entre na conversa',
     url: 'https://discord.gg/QpeK4gFc',
     icon: SiDiscord,
+  },
+  {
+    label: 'Instagram',
+    detail: '@andsonzy',
+    url: 'https://www.instagram.com/andsonzy/',
+    icon: SiInstagram,
   },
 ]

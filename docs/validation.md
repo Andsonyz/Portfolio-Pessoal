@@ -102,3 +102,81 @@ A foto pública tem 840 × 840 px e 883.506 bytes. Uma versão WebP/AVIF poderia
 - Currículo, screenshots reais dos projetos, repositórios, certificados e eventos continuam aguardando material verdadeiro. A foto já foi fornecida e integrada. Arquivos opcionais exigem reiniciar o Vite ou gerar novo build.
 - Links externos foram preservados e verificados estruturalmente, sem enviar mensagens. Disponibilidade futura dos serviços/perfis e validade do convite Discord não são garantidas.
 - Cabeçalhos de `public/_headers` precisam ser configurados no host caso ele não interprete esse arquivo. Nenhuma publicação foi realizada.
+
+## Atualização de 23/10/2026 — contador, Instagram e Open Graph
+
+Esta seção registra a validação desta atualização; os resultados acima pertencem à entrega anterior.
+
+### Fonte, métrica e persistência
+
+Identificado `@vercel/analytics` 2.0.1. A montagem duplicada em `App.tsx` foi removida, mantendo a coleta centralizada em `main.tsx`, com condição de produção e exclusão de localhost. A normalização do fim de linha em `main.tsx` não alterou sua lógica.
+
+O conector Vercel confirmou o projeto `portfolio-pessoal` e o domínio de produção verificado `andsonrocha.vercel.app`. A API oficial `/v1/query/web-analytics/visits/count` respondeu com `version`, `query.since/until` e `data.pageviews/visitors`. Nenhuma contagem observada foi copiada para a produção. Nenhum scraping foi utilizado.
+
+A função consulta **visualizações de páginas de produção nos últimos 30 dias de calendário UTC, incluindo hoje**. Não é contador de pessoas únicas nem total acumulado desde a criação do site. O campo público é `metric: pageviews`, `period: last_30_days`. Persistência, coleta e concorrência permanecem sob responsabilidade do serviço existente, sem banco adicional. Retenção, início da coleta e bloqueadores limitam os registros disponíveis.
+
+### Segurança e comportamento
+
+- `/api/visitors` aceita apenas GET, rejeita parâmetros arbitrários e fixa projeto/escopo no ambiente do servidor. Não existe endpoint para incrementar ou definir o total.
+- Token exclusivamente server-side, sem prefixo `VITE_`; upstream fixo HTTPS, redirecionamentos recusados e timeout de 5 segundos. Datas da janela e inteiros não negativos são validados. Erros privados são substituídos por resposta genérica 503 sem cache.
+- Respostas válidas têm cache CDN de 300 segundos. Isso reduz tráfego, mas não foi implementado rate limiter global ou armazenamento de IP. Cliente consulta somente ao revelar, reutiliza o resultado durante a página atual e não faz polling.
+- Estado oculto retira o número dos textos visuais, `aria-label`, descrição e tooltip; a ocultação é uma preferência visual, não controle de acesso à métrica pública. Não persiste em armazenamento do navegador.
+- Eye/EyeOff, máscara, loading, indisponibilidade, nova tentativa, zero confirmado, Intl pt-BR, botão de 44 px de altura, foco e teclado. Números extremos usam reticências sem deslocar o tema, mantendo valor completo no nome acessível/tooltip. Animação de 200 ms respeita pausa e movimento reduzido.
+- Instagram adicionado com ícone oficial monocromático, nome `@andsonzy`, nova aba e `noopener noreferrer` via `ExternalLink`. Os cinco contatos anteriores foram preservados.
+
+### Prévia de compartilhamento
+
+`public/og-image.png`: **1200 × 630 pixels, PNG, 643.661 bytes**. Imagem única, monocromática, tipográfica, com nome, Full Stack/UX/UI, UFERSA, monograma AR e domínio. A foto real não foi alterada. Favicon AR preservado. Gerada pela ferramenta integrada ImageGen e exportada nas dimensões solicitadas; o original permanece fora do projeto. Prompt registrado no plano desta atualização.
+
+`index.html` inclui title, description, canonical, Open Graph, dimensões/alt/type da imagem e Twitter `summary_large_image`. URLs absolutas usam o domínio confirmado. Esses metadados estão no HTML inicial e no build, sem depender de React ou SSR.
+
+O PNG foi inspecionado no tamanho final e em miniatura de 320 × 168. Nome e composição permanecem legíveis; os textos secundários ficam naturalmente menores. HTTP local de produção retornou **200** e **image/png**, com bytes iguais ao arquivo distribuído em `dist/og-image.png`.
+
+### Verificações executadas nesta atualização
+
+| Verificação                | Resultado                                                                                                                                                               |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run lint`             | Aprovado, sem erros ou avisos                                                                                                                                           |
+| `npm run build`            | Aprovado, incluindo TypeScript da API e arquivos do servidor                                                                                                            |
+| `npm test`                 | **50 testes aprovados** em Microsoft Edge, 2,3 minutos                                                                                                                  |
+| `npm run test:production`  | Aprovado: bundle, CSP, nove seções, quatro projetos, tema, foto, imagem OG por HTTP, metadados e Instagram; sem erros de console ou requisições externas no fluxo local |
+| API com upstream simulado  | Janela UTC, Bearer server-side, cache, método, configuração ausente, payload inválido, janela incompatível, erro/timeout simulado e zero confirmado                     |
+| UI do contador             | Máscara inicial, nenhuma consulta antecipada, loading, pt-BR, teclado, ocultar/revelar, recarga oculta, erro, retry e zero confirmado                                   |
+| Responsividade e axe       | Cabeçalho em 320, 390, 1200 e 1440 px, ambos os temas, número máximo inteiro seguro, foco real por Tab; nenhuma violação axe nesses cenários                            |
+| Regressão visual/funcional | Suíte preserva menu, swipe, foco, zoom permitido, penas, pausa, redução, foto, abertura e transição em V; auditoria geral sem overflow entre 320 e 1920 px              |
+| API local sem configuração | HTTP 503 genérico; POST retorna 405                                                                                                                                     |
+| Bundle do navegador        | Sem nomes de token server-side, segredo de teste ou endpoint privado da API Vercel                                                                                      |
+| Revisão independente       | Nenhum problema concreto remanescente identificado na API, componentes, segurança ou OG                                                                                 |
+
+Os testes automatizados usam respostas controladas apenas nos arquivos de testes; esses valores não entram no conteúdo de produção. O ensaio de timeout da API simula rejeição da requisição, sem esperar um timeout real de rede da Vercel. Os testes locais não comprovam execução da nova Function no host.
+
+`npm run format:check` foi executado após atualizar os relatórios e aprovado. As divergências iniciais de formatação foram corrigidas.
+
+Capturas: `.verification/social/`, incluindo cabeçalho e contatos nos dois temas e miniatura OG. Inspecionados visualmente cabeçalhos mobile/desktop e contatos claro/escuro. Nenhuma nova dependência foi instalada. Ajustes feitos durante a validação: ícone Instagram passou para React Icons (a versão instalada do Lucide não exporta esse ícone); nome acessível passou a incluir o valor visível; teste de foco passou a usar navegação real por Tab; validação da CSP respeita a origem Vercel Insights que já constava do HTML.
+
+### Arquivos criados e modificados
+
+| Estado      | Arquivos                                                                                      | Finalidade                                             |
+| ----------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Criados     | `api/visitors.ts`, `server/visitors.ts`, `server/visitors-plugin.ts`                          | Function, consulta oficial e adaptador local           |
+| Criados     | `src/components/ui/VisitorCounter.tsx`, `src/lib/visitor-metric.ts`                           | Interface e contrato validado                          |
+| Criados     | `.env.example`                                                                                | Nomes e configuração server-side sem segredo           |
+| Criados     | `public/og-image.png`                                                                         | Imagem social personalizada                            |
+| Criados     | `tests/visitor-counter.spec.ts`, `tests/visitors-api.spec.ts`, `tests/social-preview.spec.ts` | Cobertura funcional, API, acessibilidade e metadados   |
+| Criado      | `docs/superpowers/plans/2026-10-23-counter-instagram-social.md`                               | Plano, decisões e prompt da imagem                     |
+| Modificados | `src/components/navigation/Header.tsx`, `src/styles/global.css`                               | Posição do contador e estabilidade responsiva          |
+| Modificado  | `src/data/contacts.ts`                                                                        | Instagram, preservando contatos anteriores             |
+| Modificado  | `src/app/App.tsx`                                                                             | Remoção da segunda montagem do Analytics               |
+| Modificados | `vite.config.ts`, `tsconfig.node.json`                                                        | Adaptador local e verificação dos arquivos server-side |
+| Modificado  | `index.html`                                                                                  | Open Graph, canonical e Twitter Card                   |
+| Modificado  | `scripts/verify-production.mjs`                                                               | Verificação do PNG/HTML distribuído, Instagram e CSP   |
+| Modificados | `README.md`, `docs/validation.md`                                                             | Configuração, evidências e limitações                  |
+
+### Pendências reais
+
+1. Configurar **`ANALYTICS_READ_TOKEN`** e **`ANALYTICS_PROJECT_ID`** no ambiente server-side da Vercel; `ANALYTICS_TEAM_ID` é opcional conforme escopo do token. Valores não secretos e instruções exatas estão no README e `.env.example`. A autenticação do conector não é uma credencial disponível para a aplicação.
+2. Após autorização, publicar os arquivos e testar `/api/visitors` com a credencial real no host. Até configurar, o contador mostra indisponibilidade ao revelar.
+3. Após deploy, validar HTTP 200, `image/png` e acesso público de `https://andsonrocha.vercel.app/og-image.png`. **A URL pública retornou 404 antes do deploy**, como esperado para um arquivo novo ainda local.
+4. Inspecionar a URL no Facebook/LinkedIn e testar cartões efetivos em WhatsApp, Discord e Telegram, renovando caches quando necessário. Esses testes não foram realizados e não são declarados aprovados.
+
+Nenhum serviço pago ou banco foi criado, nenhuma variável remota alterada, nenhum deploy, commit ou push realizado. Permanecem os limites de testes simulados em Edge e ausência de avaliação em aparelhos físicos/leitores de tela reais.

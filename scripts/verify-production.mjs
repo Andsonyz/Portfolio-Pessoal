@@ -39,8 +39,34 @@ try {
   const csp = await page
     .locator('meta[http-equiv="Content-Security-Policy"]')
     .getAttribute('content')
-  assert.ok(csp.includes("connect-src 'self';"))
+  const connectSources = csp
+    .split(';')
+    .find((directive) => directive.trim().startsWith('connect-src'))
+    .trim()
+    .split(/\s+/)
+    .slice(1)
+  assert.ok(connectSources.includes("'self'"))
+  assert.ok(
+    connectSources.every((source) =>
+      ["'self'", 'https://vitals.vercel-insights.com'].includes(source),
+    ),
+  )
   assert.ok(!csp.includes('ws://'))
+  const html = await readFile('dist/index.html', 'utf8')
+  assert.ok(html.includes('https://andsonrocha.vercel.app/og-image.png'))
+  assert.ok(html.includes('summary_large_image'))
+  const ogResponse = await page.request.get('http://127.0.0.1:4173/og-image.png')
+  assert.equal(ogResponse.status(), 200)
+  assert.ok(ogResponse.headers()['content-type'].includes('image/png'))
+  const ogBytes = await ogResponse.body()
+  assert.equal(ogBytes.readUInt32BE(16), 1200)
+  assert.equal(ogBytes.readUInt32BE(20), 630)
+  assert.deepEqual(ogBytes, await readFile('dist/og-image.png'))
+  assert.equal(await page.locator('.visitor-counter').getAttribute('aria-pressed'), 'false')
+  assert.equal(
+    await page.locator('#contato a[href="https://www.instagram.com/andsonzy/"]').count(),
+    1,
+  )
   await page.getByRole('link', { name: 'Conheça meus projetos' }).click()
   const titles = []
   for (let i = 0; i < 4; i++) {

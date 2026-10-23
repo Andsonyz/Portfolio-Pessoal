@@ -2,11 +2,13 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { existsSync } from 'node:fs'
+import { visitorsPlugin } from './server/visitors-plugin.ts'
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    visitorsPlugin(),
     {
       name: 'production-content-security-policy',
       apply: 'build',

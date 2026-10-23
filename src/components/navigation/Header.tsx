@@ -3,6 +3,7 @@ import { ArrowUpRight, Menu, Moon, Pause, Play, Sun, X } from 'lucide-react'
 import { navigation } from '../../data/profile'
 import { usePreferences } from '../../hooks/usePreferences'
 import { Monogram } from '../ui/Monogram'
+import { VisitorCounter } from '../ui/VisitorCounter'
 
 export function Header() {
   const { theme, toggleTheme, transitioning, motionPaused, toggleMotion, reducedMotion } =
@@ -94,6 +95,7 @@ export function Header() {
           >
             {motionPaused ? <Play size={16} /> : <Pause size={16} />}
           </button>
+          <VisitorCounter />
           <button
             className="icon-button theme-toggle"
             type="button"

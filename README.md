@@ -140,7 +140,7 @@ Para regenerar os SVGs após editar seu desenho: `node scripts/generate-feathers
 
 ## Privacidade e segurança
 
-Site estático, sem formulário, backend próprio ou credenciais no cliente. Fontes e ilustrações são locais. A preferência de tema é gravada no navegador. O site publicado inclui Vercel Web Analytics para métricas de visita; os contatos fornecidos são deliberadamente parte do conteúdo público e não são segredos.
+Frontend estático com uma função server-side somente leitura para o contador, sem formulário ou credenciais no cliente. Fontes e ilustrações são locais. A preferência de tema é gravada no navegador. O site publicado inclui Vercel Web Analytics para métricas de visita; os contatos fornecidos são deliberadamente parte do conteúdo público e não são segredos.
 
 ### Vercel Web Analytics
 
@@ -159,3 +159,33 @@ Há uma Content Security Policy no HTML. `public/_headers` fornece cabeçalhos a
 Antes de uma futura publicação, revise arquivos em `public/`, metadados de fotos/PDFs e os contatos que deseja tornar públicos. `VITE_*` nunca deve conter segredos, pois entra no cliente. Revalide o convite do Discord, que pode expirar. A verificação automatizada não garante ausência absoluta de vulnerabilidades.
 
 Referências de implementação: [Tailwind com Vite](https://tailwindcss.com/docs/installation/using-vite), [View Transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API/Using) e [GSAP em React](https://gsap.com/resources/React/).
+
+## Contador de visualizações
+
+O cabeçalho contém um contador inicialmente oculto, com EyeOff e máscara. Revelar consulta `GET /api/visitors`; ocultar remove o valor da apresentação e dos textos acessíveis. Não há preferência persistida, polling ou consulta antes do primeiro clique. Uma consulta concluída é reutilizada durante a navegação atual; recarregue a página para atualizar. Falhas mostram **Indisponível**; ocultar/revelar tenta novamente. Zero só aparece quando confirmado pela fonte.
+
+A fonte é a [API oficial de Web Analytics da Vercel](https://vercel.com/docs/rest-api/web-analytics/counts-page-views), consultada no servidor, e não um método do SDK React. A disponibilidade para `portfolio-pessoal` foi confirmada pelo conector em 23/10/2026. A métrica é **visualizações de páginas de produção nos últimos 30 dias de calendário UTC, incluindo hoje** (`pageviews`, `last_30_days`). Não representa pessoas únicas, nem acessos de toda a vida do site. A janela começa à meia-noite UTC de 29 dias atrás e termina à meia-noite de amanhã; o dia atual está incompleto. Retenção, início da coleta, bloqueadores e disponibilidade da conta limitam os registros disponíveis. Âncoras da mesma página não são novas páginas.
+
+A coleta e persistência continuam sob responsabilidade do Vercel Web Analytics e sobrevivem a deploys. Não há banco adicional, incremento pelo cliente ou endpoint de gravação. O endpoint público mostra somente o agregado e as datas da janela. Cache CDN de cinco minutos reduz consultas; não equivale a um rate limiter global. O cliente não escolhe projeto, filtros ou período. Métodos de escrita e parâmetros são rejeitados; token, detalhes dos erros upstream e dados individuais não são devolvidos. Timeout no servidor: 5 s; cliente: 6,5 s. Não foram adicionados cookies, IDs pessoais ou fingerprinting.
+
+### Configuração pendente do contador
+
+No projeto **portfolio-pessoal**, configure variáveis **server-side** na Vercel antes do próximo deploy autorizado:
+
+| Variável               | Valor/configuração                                                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ANALYTICS_READ_TOKEN` | Token Vercel válido com acesso ao Web Analytics desse projeto. Use o menor escopo e prazo disponíveis; nunca o prefixo `VITE_`, Git ou `public/`. |
+| `ANALYTICS_PROJECT_ID` | `prj_9w2OD5NidVXvsfk0Ih8uGjngq25l` (também aceita o nome `portfolio-pessoal`).                                                                    |
+| `ANALYTICS_TEAM_ID`    | Opcional: `team_LvnPD94kY8IS3GskS8NERCmW` quando necessário para o escopo do token.                                                               |
+
+A autenticação do conector usada na inspeção não é transferida para a aplicação. Nenhum token, variável remota ou serviço foi criado nesta atualização. Sem configuração, a função retorna HTTP 503 com `temporarily_unavailable`; não inventa uma contagem. O token precisa ser configurado apenas nos ambientes em que o endpoint deve funcionar. A API consulta produção mesmo em um preview.
+
+Para desenvolvimento local, copie `.env.example` para `.env.local`, preencha privadamente e reinicie `npm run dev`. O adaptador de `server/visitors-plugin.ts` também atende `npm run preview`. Essas variáveis não entram no bundle do navegador. Na Vercel, `api/visitors.ts` é uma Function Node; em hospedagem puramente estática será necessário oferecer uma função equivalente. Não envie o token em conversas ou tickets.
+
+## Instagram e compartilhamento
+
+Instagram **[@andsonzy](https://www.instagram.com/andsonzy/)** foi acrescentado em `src/data/contacts.ts`, usando ícone monocromático e `ExternalLink`. E-mail, GitHub, LinkedIn, WhatsApp e Discord permanecem.
+
+`public/og-image.png` é uma imagem estável de **1200 × 630 px**, independente do tema, com nome, áreas de atuação, UFERSA e assinatura AR. O favicon AR existente foi preservado. `index.html` contém title, description, canonical, Open Graph e Twitter Card antes de executar JavaScript, sem SSR. Domínio de produção confirmado: **https://andsonrocha.vercel.app/**; imagem absoluta: **https://andsonrocha.vercel.app/og-image.png**.
+
+Depois de um deploy autorizado, verifique a imagem com HTTP 200, `Content-Type: image/png` e acesso sem autenticação. Em seguida use [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) e [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) e compartilhe o link no WhatsApp/Discord/Telegram. Serviços mantêm caches independentes; solicite nova inspeção quando necessário. Não foi feito deploy nem teste efetivo do cartão nessas plataformas. A URL pública da nova imagem ainda retornou 404 na inspeção anterior à publicação; os testes locais não substituem essa etapa.
