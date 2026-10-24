@@ -18,7 +18,7 @@ test('carrossel responde a botões e teclado sem criar repositórios fictícios'
   await expect(carousel.getByRole('heading', { name: 'Entre Mitos e Raízes' })).toBeVisible()
   await page.getByRole('button', { name: 'Próximo projeto' }).click()
   await expect(
-    carousel.getByRole('heading', { name: 'Sistema de Consultório/Clínica' }),
+    carousel.getByRole('heading', { name: 'Ame-Pet — Sistema de Gerenciamento de Petshop' }),
   ).toBeVisible()
   await carousel.focus()
   await page.keyboard.press('End')
@@ -109,7 +109,9 @@ test('swipe horizontal troca o projeto e gesto vertical preserva o slide', async
       }),
     )
   })
-  await expect(page.locator('.project-information h3')).toHaveText('Sistema de Consultório/Clínica')
+  await expect(page.locator('.project-information h3')).toHaveText(
+    'Ame-Pet — Sistema de Gerenciamento de Petshop',
+  )
   await slide.evaluate((target) => {
     const touches = [
       new Touch({ identifier: 3, target, clientX: 200, clientY: 200 }),
@@ -123,7 +125,9 @@ test('swipe horizontal troca o projeto e gesto vertical preserva o slide', async
       }),
     )
   })
-  await expect(page.locator('.project-information h3')).toHaveText('Sistema de Consultório/Clínica')
+  await expect(page.locator('.project-information h3')).toHaveText(
+    'Ame-Pet — Sistema de Gerenciamento de Petshop',
+  )
   await slide.evaluate((target) => {
     target.dispatchEvent(
       new TouchEvent('touchstart', {
@@ -138,7 +142,9 @@ test('swipe horizontal troca o projeto e gesto vertical preserva o slide', async
       }),
     )
   })
-  await expect(page.locator('.project-information h3')).toHaveText('Sistema de Consultório/Clínica')
+  await expect(page.locator('.project-information h3')).toHaveText(
+    'Ame-Pet — Sistema de Gerenciamento de Petshop',
+  )
 })
 
 test('localStorage indisponível não impede a troca de tema', async ({ page }) => {
@@ -160,11 +166,17 @@ test('entrada anima o conteúdo em cada carregamento', async ({ page }) => {
   await expect
     .poll(() => page.locator('h1').evaluate((element) => Number(getComputedStyle(element).opacity)))
     .toBeLessThan(1)
+  await expect(page.locator('html')).toHaveAttribute('data-intro-state', 'complete', {
+    timeout: 10000,
+  })
   await expect(page.locator('h1')).toHaveCSS('opacity', '1')
   await page.reload()
   await expect
     .poll(() => page.locator('h1').evaluate((element) => Number(getComputedStyle(element).opacity)))
     .toBeLessThan(1)
+  await expect(page.locator('html')).toHaveAttribute('data-intro-state', 'complete', {
+    timeout: 10000,
+  })
   await expect(page.locator('h1')).toHaveCSS('opacity', '1')
 })
 
@@ -190,6 +202,9 @@ test('penas se movem, pausam, invertem de cor e respeitam redução', async ({ p
 test('corte em V revela a interface e termina nos dois sentidos', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.goto('/')
+  await expect(page.locator('html')).toHaveAttribute('data-intro-state', 'complete', {
+    timeout: 12000,
+  })
   await expect(page.locator('h1')).toHaveCSS('opacity', '1')
   await page.getByRole('button', { name: 'Ativar tema claro' }).click()
   await expect(page.getByRole('button', { name: 'Ativar tema escuro' })).toBeDisabled()
@@ -245,7 +260,7 @@ test('desktop e mobile sem overflow, erros de console ou violações axe', async
   })
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
-  await page.evaluate(() => document.fonts.ready)
+  await page.waitForLoadState('networkidle')
   await page.locator('img[loading="lazy"]').evaluateAll((images) =>
     images.forEach((image) => {
       ;(image as HTMLImageElement).loading = 'eager'

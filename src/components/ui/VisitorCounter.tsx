@@ -12,9 +12,8 @@ export function VisitorCounter() {
   const descriptionId = useId()
   useEffect(() => () => controller.current?.abort(), [])
 
-  async function reveal() {
-    setVisible(!visible)
-    if (visible || data || status === 'loading') return
+  async function load() {
+    if (status === 'loading') return
     const pending = new AbortController()
     controller.current = pending
     setStatus('loading')
@@ -35,33 +34,46 @@ export function VisitorCounter() {
     }
   }
 
+  function toggle() {
+    setVisible(!visible)
+    if (!visible && !data) void load()
+  }
+
   const value = !visible
     ? '•••••'
     : data
       ? numberFormat.format(data.total)
       : status === 'loading'
         ? 'Carregando…'
-        : 'Indisponível'
-  const description = `Visualizações nos últimos 30 dias, incluindo hoje (UTC).${visible ? ` ${value}.` : ''}${visible && status === 'error' ? ' Oculte e mostre novamente para tentar de novo.' : ''}`
+        : 'Falha'
+  const description = `Visitantes estimados nos últimos 30 dias de calendário UTC, incluindo hoje. A Vercel reinicia a identificação anônima após 24 horas; a mesma pessoa pode ser contada novamente.${visible ? ` ${value}.` : ''}${visible && status === 'error' ? ' A consulta falhou. Tente novamente.' : ''}`
   return (
-    <>
+    <div className="visitor-counter-wrap">
       <button
         type="button"
         className="visitor-counter"
-        aria-label={`${visible ? 'Ocultar' : 'Mostrar'} quantidade de visualizações${visible ? ` ${value}` : ''}`}
+        aria-label={`Visitantes ${value}. ${visible ? 'Ocultar' : 'Mostrar'} quantidade de visitantes estimados`}
         aria-pressed={visible}
         aria-describedby={descriptionId}
         title={description}
-        onClick={() => void reveal()}
+        onClick={toggle}
       >
         {visible ? <Eye size={17} aria-hidden="true" /> : <EyeOff size={17} aria-hidden="true" />}
         <span className="visitor-counter-copy" aria-hidden="true">
-          <span className="visitor-counter-label">Visualizações </span>
+          <span className="visitor-counter-label">Visitantes </span>
           <span key={String(visible)} className="visitor-counter-value">
             {value}
           </span>
         </span>
       </button>
+      {visible && status === 'error' && (
+        <div className="visitor-counter-error">
+          <span>Não foi possível consultar agora.</span>
+          <button type="button" onClick={() => void load()}>
+            Tentar novamente
+          </button>
+        </div>
+      )}
       <span
         id={descriptionId}
         className="sr-only"
@@ -70,6 +82,6 @@ export function VisitorCounter() {
       >
         {description}
       </span>
-    </>
+    </div>
   )
 }

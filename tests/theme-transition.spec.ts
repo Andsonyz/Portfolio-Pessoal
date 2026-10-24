@@ -2,6 +2,9 @@ import { expect, test } from '@playwright/test'
 
 test('a revelação em V não deixa uma linha DOM visível sob os snapshots', async ({ page }) => {
   await page.goto('/')
+  await expect(page.locator('html')).toHaveAttribute('data-intro-state', 'complete', {
+    timeout: 12000,
+  })
   await expect(page.locator('h1')).toHaveCSS('opacity', '1')
   await page.getByRole('button', { name: 'Ativar tema claro' }).click()
   await expect
@@ -31,6 +34,9 @@ for (const width of [390, 1440]) {
         await page.setViewportSize({ width, height: 900 })
         await page.addInitScript((theme) => localStorage.setItem('ar-theme', theme), initialTheme)
         await page.goto('/')
+        await expect(page.locator('html')).toHaveAttribute('data-intro-state', 'complete', {
+          timeout: 12000,
+        })
         await expect(page.locator('h1')).toHaveCSS('opacity', '1')
         if (position === 'projects') {
           await page.locator('#projetos').scrollIntoViewIfNeeded()

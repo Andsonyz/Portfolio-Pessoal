@@ -16,5 +16,5 @@ export const motionSettings = {
     radius: 115,
     repulsion: 28,
   },
-  portrait: { rotation: 720, duration: 1.6, haloRadius: 75, haloTravel: 22 },
+  portrait: { rotationY: 720, duration: 1.6, haloRadius: 75, haloTravel: 22 },
 } as const

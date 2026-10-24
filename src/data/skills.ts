@@ -6,6 +6,8 @@ import {
   SiTailwindcss,
   SiVite,
   SiReact,
+  SiPython,
+  SiNodedotjs,
   SiC,
   SiCplusplus,
   SiMysql,
@@ -21,7 +23,7 @@ import type { IconType } from 'react-icons'
 export const skills: {
   category: string
   note: string
-  items: { name: string; icon: IconType }[]
+  items: { name: string; icon: IconType; detail?: string }[]
 }[] = [
   {
     category: 'Front-end',
@@ -37,10 +39,12 @@ export const skills: {
     ],
   },
   {
-    category: 'Back-end / Linguagens',
-    note: 'Lógica & estrutura',
+    category: 'Linguagens & execução',
+    note: 'Lógica, estrutura & runtime',
     items: [
       { name: 'Java', icon: FaJava },
+      { name: 'Python', icon: SiPython },
+      { name: 'Node.js', icon: SiNodedotjs, detail: 'Ambiente de execução JavaScript' },
       { name: 'C', icon: SiC },
       { name: 'C++', icon: SiCplusplus },
     ],

@@ -18,17 +18,20 @@ export function ProfilePortrait() {
       const disc = control.querySelector('.portrait-circle')!
       control.setAttribute('aria-busy', 'false')
       if (motionPaused) return
-      spin.current = gsap.to(disc, {
-        rotation: motionSettings.portrait.rotation,
-        duration: motionSettings.portrait.duration,
-        ease: 'power3.out',
-        paused: true,
-        onStart: () => control.setAttribute('aria-busy', 'true'),
-        onComplete: () => {
-          gsap.set(disc, { clearProps: 'transform' })
-          control.setAttribute('aria-busy', 'false')
+      spin.current = gsap.fromTo(
+        disc,
+        { rotationY: 0 },
+        {
+          rotationY: motionSettings.portrait.rotationY,
+          duration: motionSettings.portrait.duration,
+          ease: 'power4.out',
+          paused: true,
+          onComplete: () => {
+            gsap.set(disc, { clearProps: 'transform' })
+            control.setAttribute('aria-busy', 'false')
+          },
         },
-      })
+      )
       const media = gsap.matchMedia()
       media.add('(hover: hover) and (pointer: fine)', () => {
         const halo = frame.current!.querySelector('.portrait-halo')!
@@ -94,30 +97,44 @@ export function ProfilePortrait() {
             button.current?.setAttribute('data-feedback', 'true')
             return
           }
-          if (!spin.current?.isActive()) spin.current?.invalidate().restart()
+          if (spin.current && !spin.current.isActive()) {
+            button.current?.setAttribute('aria-busy', 'true')
+            spin.current.invalidate().restart()
+          }
         }}
         onBlur={() => button.current?.removeAttribute('data-feedback')}
       >
         <span className="portrait-circle">
-          {hasImage ? (
-            <img
-              src={__PROFILE_IMAGE__!}
-              alt="Andson Rocha"
-              width="320"
-              height="320"
-              fetchPriority="high"
-              onError={() => setImageFailed(true)}
-            />
-          ) : (
-            <span
-              className="portrait-placeholder"
-              role="img"
-              aria-label="Monograma AR, espaço reservado para a foto de Andson Rocha"
-            >
-              <Monogram />
-              <span>EM CONSTANTE CONSTRUÇÃO</span>
-            </span>
-          )}
+          <span className="portrait-face portrait-front">
+            {hasImage ? (
+              <img
+                src={__PROFILE_IMAGE__!}
+                alt="Andson Rocha"
+                width="320"
+                height="320"
+                fetchPriority="high"
+                onError={() => setImageFailed(true)}
+              />
+            ) : (
+              <span
+                className="portrait-placeholder"
+                role="img"
+                aria-label="Monograma AR, espaço reservado para a foto de Andson Rocha"
+              >
+                <Monogram />
+                <span>EM CONSTANTE CONSTRUÇÃO</span>
+              </span>
+            )}
+          </span>
+          <span className="portrait-face portrait-back" aria-hidden="true">
+            {hasImage ? (
+              <img src={__PROFILE_IMAGE__!} alt="" width="320" height="320" />
+            ) : (
+              <span className="portrait-placeholder">
+                <Monogram />
+              </span>
+            )}
+          </span>
         </span>
       </button>
       <span className="portrait-coordinate">AR / 01</span>

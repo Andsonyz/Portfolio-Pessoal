@@ -12,6 +12,8 @@ import { Certifications } from '../sections/Certifications'
 import { Journey } from '../sections/Journey'
 import { Events } from '../sections/Events'
 import { Contact } from '../sections/Contact'
+import { SectionMarquee } from '../components/animations/SectionMarquee'
+import { sectionMarquees } from '../data/marquees'
 
 export function App() {
   return (
@@ -22,12 +24,15 @@ export function App() {
         <main id="conteudo" tabIndex={-1}>
           <Hero />
           <About />
+          <SectionMarquee {...sectionMarquees.skills} />
           <Skills />
           <Experiences />
+          <SectionMarquee {...sectionMarquees.projects} />
           <Projects />
           <Certifications />
           <Journey />
           <Events />
+          <SectionMarquee {...sectionMarquees.contact} />
           <Contact />
         </main>
         <Footer />

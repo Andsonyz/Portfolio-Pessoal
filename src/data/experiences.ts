@@ -16,15 +16,19 @@ export const experiences = [
   },
   {
     number: '02',
-    title: 'Tecnologia para incluir.',
+    title: 'Desenvolvimento de Software para Acessibilidade Digital',
     category: 'Acessibilidade e inclusão',
+    status: 'Em desenvolvimento',
     description:
-      'Um olhar atento às diferentes formas de acessar e utilizar a tecnologia. Temas de interesse que orientam a construção de experiências mais inclusivas no ambiente acadêmico e digital.',
+      'Participação em projeto de desenvolvimento de software voltado à acessibilidade digital de pessoas com baixa visão ou cegueira, com foco na criação de recursos que favoreçam a interação com sistemas computacionais e ampliem a autonomia dos usuários.',
     topics: [
-      'Inclusão no ambiente acadêmico',
       'Acessibilidade digital',
       'Tecnologia assistiva',
+      'Inclusão digital',
+      'Desenvolvimento de software',
       'Experiência do usuário',
+      'Usabilidade',
+      'Interfaces acessíveis',
     ],
   },
 ]

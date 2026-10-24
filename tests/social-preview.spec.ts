@@ -41,10 +41,11 @@ for (const theme of ['dark', 'light']) {
         route.fulfill({
           json: {
             total: Number.MAX_SAFE_INTEGER,
-            metric: 'pageviews',
+            metric: 'estimated_unique_visitors',
             period: 'last_30_days',
             since: '2026-09-24T00:00:00.000Z',
             until: '2026-10-24T00:00:00.000Z',
+            updatedAt: '2026-10-23T12:00:00.000Z',
           },
         }),
       )

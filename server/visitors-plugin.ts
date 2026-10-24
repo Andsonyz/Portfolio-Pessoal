@@ -1,5 +1,5 @@
 import { loadEnv, type Plugin, type PreviewServer, type ViteDevServer } from 'vite'
-import { readVisitors } from './visitors.ts'
+import { createVisitorsReader } from './visitors.ts'
 
 // Local adapter only. Secrets are never passed to Vite's client-side `define`.
 export function visitorsPlugin(): Plugin {
@@ -8,6 +8,7 @@ export function visitorsPlugin(): Plugin {
       ...loadEnv(server.config.mode, server.config.envDir, 'ANALYTICS_'),
       ...process.env,
     }
+    const readVisitors = createVisitorsReader(() => env)
     server.middlewares.use(async (req, res, next) => {
       const url = new URL(req.url ?? '/', 'http://127.0.0.1')
       if (url.pathname !== '/api/visitors') return next()
@@ -16,7 +17,7 @@ export function visitorsPlugin(): Plugin {
         res.end()
         return
       }
-      const response = await readVisitors(new Request(url, { method: req.method }), env)
+      const response = await readVisitors(new Request(url, { method: req.method }))
       res.statusCode = response.status
       response.headers.forEach((value, key) => res.setHeader(key, value))
       res.end(await response.text())

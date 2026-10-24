@@ -265,6 +265,9 @@ main,
   align-items: center;
   flex-shrink: 0;
 }
+.visitor-counter-wrap {
+  position: relative;
+}
 .visitor-counter {
   display: flex;
   align-items: center;
@@ -281,6 +284,30 @@ main,
 }
 .visitor-counter:hover {
   border-color: var(--border);
+}
+.visitor-counter-error {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 25;
+  width: 210px;
+  padding: 13px;
+  border: 1px solid var(--strong-border);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: 0 12px 28px #0003;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.visitor-counter-error button {
+  display: block;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .visitor-counter > svg {
   flex-shrink: 0;
@@ -488,6 +515,7 @@ main,
   isolation: isolate;
 }
 .portrait-button {
+  perspective: 1000px;
   display: block;
   position: relative;
   width: 100%;
@@ -526,11 +554,23 @@ main,
   display: block;
   width: 100%;
   height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform-origin: center;
+}
+.portrait-face {
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
   overflow: hidden;
   background: var(--surface);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
-.portrait-circle > img {
+.portrait-back {
+  transform: rotateY(180deg);
+}
+.portrait-face > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -838,6 +878,14 @@ main,
   font-size: 13px;
   line-height: 1.95;
   color: var(--muted);
+}
+.experience > .experience-status {
+  display: inline-block;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 3px 9px;
+  margin-bottom: 16px;
+  font-size: 10px;
 }
 .experience ul {
   display: grid;

@@ -69,12 +69,12 @@ try {
   )
   await page.getByRole('link', { name: 'Conheça meus projetos' }).click()
   const titles = []
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
     titles.push(await page.locator('.project-information h3').textContent())
     await page.locator('.project-art img').evaluate((image) => image.decode())
     await page.getByRole('button', { name: 'Próximo projeto' }).click()
   }
-  assert.equal(new Set(titles).size, 4)
+  assert.equal(new Set(titles).size, 5)
   await page.locator('#trajetoria summary').click()
   assert.equal(await page.locator('#trajetoria details').getAttribute('open'), '')
   assert.equal(await page.getByRole('link', { name: /baixar currículo/i }).count(), 0)

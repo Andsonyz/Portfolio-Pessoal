@@ -17,6 +17,7 @@ export function Experiences() {
               <ArrowUpRight aria-hidden="true" size={24} />
             </div>
             <h3>{item.title}</h3>
+            {item.status && <p className="experience-status">{item.status}</p>}
             <p>{item.description}</p>
             <ul>
               {item.topics.map((topic) => (

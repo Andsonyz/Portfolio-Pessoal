@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680">
+  <rect width="900" height="680" fill="#dedede"/>
+  <g stroke="#b3b3b3" fill="none"><path d="M55 100h790M55 570h790M570 100v470"/><circle cx="570" cy="325" r="160"/><path d="M570 165v320M410 325h320"/></g>
+  <text x="55" y="65" fill="#555" font-family="sans-serif" font-size="11" letter-spacing="4">JAVA · POO · CUIDADO</text>
+  <g fill="#1b1b1b"><ellipse cx="530" cy="259" rx="23" ry="32" transform="rotate(-20 530 259)"/><ellipse cx="595" cy="250" rx="23" ry="32" transform="rotate(12 595 250)"/><ellipse cx="646" cy="291" rx="22" ry="29" transform="rotate(35 646 291)"/><ellipse cx="487" cy="305" rx="22" ry="29" transform="rotate(-35 487 305)"/><path d="M522 345c17-48 63-56 90-11 17 28 37 50 17 67-18 16-40-3-62-4-24 0-48 24-66 8-19-17 7-37 21-60Z"/></g>
+  <g font-family="sans-serif" fill="#171717"><text x="55" y="250" font-size="74" letter-spacing="-4">Ame-</text><text x="55" y="326" font-size="74" letter-spacing="-4">Pet.</text><text x="55" y="417" font-size="13">Clientes. Pets. Cuidados.</text><text x="55" y="448" font-size="11" fill="#555">PROJETO ACADÊMICO COLABORATIVO</text><text x="55" y="624" font-size="20" letter-spacing="1">Organizar também é cuidar.</text></g>
+  <text x="686" y="624" fill="#555" font-family="sans-serif" font-size="10">ESTUDO CONCEITUAL</text>
+</svg>

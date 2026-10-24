@@ -1,5 +1,7 @@
 # Relatório de validação — Atualização 3 — 22/10/2026
 
+Os registros anteriores abaixo são históricos. A atualização mais recente, com a métrica de visitantes estimados e cinco projetos, está no fim deste documento.
+
 ## Complemento — Vercel Analytics — 23/10/2026
 
 Validação desta alteração: `npm run lint`, `npm run build` e `npm run format:check` aprovados; `npm test -- --reporter=line` concluiu os 29 cenários com sucesso em 3,2 minutos.
@@ -180,3 +182,40 @@ Capturas: `.verification/social/`, incluindo cabeçalho e contatos nos dois tema
 4. Inspecionar a URL no Facebook/LinkedIn e testar cartões efetivos em WhatsApp, Discord e Telegram, renovando caches quando necessário. Esses testes não foram realizados e não são declarados aprovados.
 
 Nenhum serviço pago ou banco foi criado, nenhuma variável remota alterada, nenhum deploy, commit ou push realizado. Permanecem os limites de testes simulados em Edge e ausência de avaliação em aparelhos físicos/leitores de tela reais.
+
+## Atualização de 23/10/2026 — expansão do portfólio e correção do contador
+
+### Diagnóstico e fonte real
+
+O endpoint publicado `https://andsonrocha.vercel.app/api/visitors` respondeu HTTP 500 `FUNCTION_INVOCATION_FAILED`, antes de entregar JSON. O builder oficial `@vercel/node` reproduziu uma falha de importação: o artefato gerava `server/visitors.js`, enquanto `api/visitors.js` ainda importava `../server/visitors.ts`. A importação foi corrigida para `.js`, e o `tsconfig.json` raiz passou a incluir tipos Node exigidos pelo builder. Também faltava `ANALYTICS_READ_TOKEN` no projeto no início da investigação. O proprietário configurou o token privadamente para produção e desenvolvimento; `ANALYTICS_PROJECT_ID` e `ANALYTICS_TEAM_ID` foram adicionados aos mesmos alvos. `.env.local` contém a configuração local e permanece ignorado pelo Git. Nenhum valor secreto foi impresso ou inserido em `VITE_*`.
+
+A função existente agora usa `data.visitors` da API oficial `/v1/query/web-analytics/visits/count`. O contrato público é `metric: estimated_unique_visitors`, `period: last_30_days`, `since`, `until`, `updatedAt` e `total` validado. A janela inclui 30 dias de calendário UTC, contando hoje. A Vercel renova sua identificação anônima após 24 horas, então o agregado é uma estimativa e a mesma pessoa pode ser contada novamente no período. A coleta e persistência global pertencem ao Web Analytics; não há incremento público ou banco adicional.
+
+O servidor registra somente códigos de diagnóstico para falta de configuração, autenticação/permissão, 429, outros status upstream, JSON inválido, formato inválido e falha de rede. O cliente recebe apenas 503 genérico e `Retry-After: 30`. GET sem parâmetros é o único método de leitura; timeout de 5 s, redirecionamento proibido, cache CDN de 300 s e cache curto por instância com agrupamento de consultas simultâneas limitam chamadas redundantes. Esse cache não é um rate limiter global. A UI mantém EyeOff e máscara inicial, carrega sob demanda, formata em pt-BR, esconde novamente e oferece **Tentar novamente** no erro.
+
+### Evidência do fluxo real e limite de produção
+
+Após reiniciar Vite, `GET http://127.0.0.1:5173/api/visitors` respondeu **HTTP 200** com inteiro válido, período e métrica esperados. Um teste de Edge sem interceptação confirmou que o botão revelou o mesmo agregado formatado e voltou à máscara, sem erro de página. O pacote compilado pelo builder oficial `@vercel/node` importou o handler e consultou a API real com `.env.local`, obtendo resposta válida. O artefato compilado sem configuração retornou 503 controlado. Esses ensaios não comprovam o deployment.
+
+O endpoint público continuou retornando **HTTP 500 `FUNCTION_INVOCATION_FAILED`** após a correção local e a configuração das variáveis, pois o deployment atual ainda executa código anterior. Um novo deploy autorizado é necessário para validar a Function e o componente na produção. Não foi feito deploy ou push.
+
+O proprietário realizou um redeploy em 24/10/2026 UTC. A Vercel o marcou `READY` (`dpl_EcXVrmNYD4TDHu2dARc886FGpVkY`), mas a origem Git permaneceu no commit `0b50eb0c00f5a1deb709f9e4401e877fb836dad4`, que antecede estas alterações locais. A URL canônica `/api/visitors` continuou em HTTP 500 após esse redeploy, enquanto `/og-image.png` passou a responder HTTP 200 com `image/png`, 1200 × 630 px e 643.661 bytes. O código corrigido ainda precisa entrar em um deployment para validar o contador remoto.
+
+No Edge, o site público confirmou o mesmo limite de ponta a ponta: após clicar no olho, a requisição `/api/visitors` respondeu 500 e o botão exibiu **“Visualizações Indisponível”**, interface do commit antigo. Isso distingue o deployment `READY` do funcionamento efetivo da Function.
+
+### Conteúdo e movimento
+
+`src/data/projects.ts` contém cinco itens: Entre Mitos e Raízes, Ame-Pet, Sistema Restaurante Dividão, SAPO e Portfólio Pessoal. Clínica foi removida do conteúdo público e seu SVG conceitual foi retirado. Ame-Pet e Dividão são identificados como acadêmicos, colaborativos e de terminal; descrições e links foram conferidos nos repositórios dos projetos. [Ame-Pet](https://github.com/gabrdsp/Ame-Pet/tree/0af63f26d2f2e7cc1f76bf2a02e2ef508dfab5f1) foi inspecionado no SHA `0af63f2`; `MenuCompraAdocao.java` confirma Strategy, enquanto Factory e Observer ficaram de fora por falta de evidência estrutural. [Restaurante Dividão](https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante/tree/c5adae206062df3c4521b96747dcd48d81e6b9c1) foi inspecionado no SHA `c5adae2`; `cardapio.c`/`pedidos.c` confirmam CRUD, estados e alocação dinâmica. Os novos SVGs são ilustrações conceituais monocromáticas, não screenshots. O carrossel deriva cinco indicadores do array.
+
+A experiência de desenvolvimento para acessibilidade digital aparece como **Em desenvolvimento**, sem data, organização, cargo ou resultado inventado. O texto Sobre Mim foi atualizado em primeira pessoa. Python e Node.js aparecem nas habilidades, com Node.js identificado como ambiente de execução. A foto gira 720° no eixo Y, com duas faces circulares, desaceleração e halo em camada separada. Três faixas reutilizáveis aparecem antes de Habilidades, Projetos e Contato, com alternativa estática e pausa/redução de movimento. O relógio do rodapé usa `Intl.DateTimeFormat`, `America/Fortaleza`, hora real e atualização por segundo.
+
+### Verificações desta atualização
+
+- `npm run lint`, `npm run build` e `npm run format:check`: aprovados na versão local final.
+- `npm test`: **57 testes aprovados** no Edge em 2,6 minutos. Cobre cinco projetos, experiências, relógio, faixas, giro repetido, acessibilidade e responsividade, carrossel, abertura, penas, tema e corte em V. Testes de API com respostas controladas cobrem erros, cache, concorrência, validação e virada UTC; a consulta real foi validada separadamente.
+- `npm run test:production`: aprovado no build servido por `vite preview`; nove seções, cinco títulos, tema, CSP, foto pública sem metadados, Open Graph, Instagram e ausência de erros de console/requisições externas no fluxo oculto.
+- `GET /api/visitors` no Vite e no preview: **HTTP 200** com métrica `estimated_unique_visitors` e intervalo válido, usando o token local sem expô-lo. O navegador revelou e ocultou o mesmo agregado tanto no desenvolvimento quanto no preview.
+- Empacotamento `@vercel/node` 27.0.1 com TypeScript 6.0.3/Node 24: o artefato importou `server/visitors.js`, respondeu 503 sem configuração e consultou o Analytics real com `.env.local`, retornando dados válidos.
+- Segurança: `.env.local` ignorado pelo Git; comparação privada confirmou que o valor do token e o endpoint administrativo da Vercel não aparecem em `dist/`.
+- Inspeção visual em Edge: capturas desktop/mobile de ambos os temas para cabeçalho, projetos novos, experiências e rodapé; layout monocromático, textos legíveis e sem overflow nos tamanhos ensaiados. Axe não encontrou violação nas configurações automatizadas testadas. Não houve ensaio em aparelho físico ou leitor de tela real.
+- Produção atual: **não aprovada para o contador**. O redeploy do commit antigo segue em HTTP 500 e mostra “Visualizações Indisponível”. A imagem OG já responde HTTP 200, `image/png`, 1200 × 630. Nenhum cartão de rede social foi testado diretamente.

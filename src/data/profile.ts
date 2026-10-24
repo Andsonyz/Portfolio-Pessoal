@@ -14,8 +14,9 @@ export const profile = {
   ],
   about: [
     'Sou Andson Rocha, graduando do 5º período do Bacharelado Interdisciplinar em Tecnologia da Informação pela Universidade Federal Rural do Semi-Árido (UFERSA), onde iniciei minha trajetória acadêmica em 2024.',
-    'Tenho interesse em Desenvolvimento Full Stack, Engenharia de Software, UX/UI Design e Cloud Computing. Ao longo da minha formação, venho ampliando meus conhecimentos por meio de projetos acadêmicos e experiências práticas, explorando diferentes tecnologias e metodologias de desenvolvimento.',
-    'Busco desenvolver soluções que combinem funcionalidade, organização e uma boa experiência para o usuário, valorizando o aprendizado contínuo, a criatividade e a aplicação prática da tecnologia.',
+    'Tenho interesse em Desenvolvimento Full Stack, Engenharia de Software, UX/UI Design e Cloud Computing. Nos projetos acadêmicos, conecto prática e colaboração, explorando Java, Python, JavaScript, Node.js e tecnologias de desenvolvimento web.',
+    'Também participo de um projeto voltado à acessibilidade digital de pessoas com baixa visão ou cegueira. Essa experiência reforça meu interesse em criar soluções úteis, inclusivas e acessíveis.',
+    'Busco continuar evoluindo tecnicamente por meio da colaboração, da criatividade e da aplicação prática do conhecimento, com atenção à organização e à experiência de quem utiliza cada solução.',
   ],
 }
 

@@ -21,10 +21,11 @@ export function Skills() {
               <p>{group.note}</p>
             </div>
             <ul className="skill-items">
-              {group.items.map(({ name, icon: Icon }) => (
-                <li key={name}>
+              {group.items.map(({ name, icon: Icon, detail }) => (
+                <li key={name} title={detail}>
                   <Icon aria-hidden="true" />
                   <span>{name}</span>
+                  {detail && <span className="sr-only"> — {detail}</span>}
                 </li>
               ))}
             </ul>

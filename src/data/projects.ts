@@ -18,21 +18,41 @@ export const projects: Project[] = [
     imageAlt: 'Ilustração conceitual: raízes e camadas de uma floresta, em preto e branco.',
   },
   {
-    id: 'clinica',
-    title: 'Sistema de Consultório/Clínica',
-    category: 'Banco de dados · Projeto acadêmico',
+    id: 'ame-pet',
+    title: 'Ame-Pet — Sistema de Gerenciamento de Petshop',
+    category: 'Projeto acadêmico colaborativo · POO',
     description:
-      'Organização de informações clínicas a partir de uma base sólida: modelagem, integridade dos dados e consultas estruturadas.',
-    technologies: ['Modelagem de dados', 'SQL'],
+      'Desenvolvido em equipe na disciplina de Programação Orientada a Objetos da UFERSA. Um sistema de terminal em Java para organizar clientes, pets, atendimentos e produtos de um petshop.',
+    technologies: ['Java', 'Programação Orientada a Objetos', 'Aplicação de terminal'],
     highlights: [
-      'Modelagem conceitual e lógica',
-      'Normalização',
-      'Consultas SQL e views',
-      'Triggers e funções',
+      'Cadastros de clientes e pets, com histórico de atendimentos',
+      'Produtos, estoque, vendas e adoção de pets',
+      'Encapsulamento, herança, polimorfismo e abstração',
+      'Strategy nas formas de pagamento, com cálculos simulados',
     ],
-    image: '/images/projects/clinica.svg',
+    image: '/images/projects/ame-pet.svg',
     imageAlt:
-      'Ilustração conceitual: módulos conectados representam a organização de dados clínicos.',
+      'Composição conceitual Ame-Pet: vínculos entre clientes, pets e cuidados. Não é uma captura do sistema.',
+    repository: 'https://github.com/gabrdsp/Ame-Pet',
+  },
+  {
+    id: 'restaurante-dividao',
+    title: 'Sistema Restaurante Dividão',
+    category: 'Projeto acadêmico colaborativo · Estruturas de Dados',
+    description:
+      'Projeto em equipe para a primeira unidade de Estruturas de Dados I da UFERSA. Uma aplicação de terminal em C que simula o gerenciamento de cardápio e pedidos de um restaurante.',
+    technologies: ['C', 'Estruturas de Dados', 'Aplicação de terminal'],
+    highlights: [
+      'Cadastro, consulta, atualização e remoção de itens do cardápio',
+      'Pedidos: pendente, em preparo, pronto e entregue',
+      'Ponteiros, strings e vetores dinâmicos com malloc, realloc e free',
+      'Modularização, structs e enums',
+      'Disciplina ministrada por George Felipe Fernandes Vieira',
+    ],
+    image: '/images/projects/restaurante-dividao.svg',
+    imageAlt:
+      'Composição conceitual Dividão: organização de pedidos ao redor de um prato. Não é uma captura do sistema.',
+    repository: 'https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante',
   },
   {
     id: 'sapo',
