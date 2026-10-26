@@ -14,8 +14,10 @@ export function PageMotion({ children }: { children: ReactNode }) {
   const { motionPaused } = usePreferences()
   useGSAP(
     () => {
+      let removeSkipListeners: (() => void) | undefined
       const surfaces = [scope.current, document.querySelector('.site-header')].filter(Boolean)
       const finish = () => {
+        removeSkipListeners?.()
         completed.current = true
         document.documentElement.dataset.introState = 'complete'
         gsap.set(surfaces, { clearProps: 'opacity,filter,transform' })
@@ -70,14 +72,15 @@ export function PageMotion({ children }: { children: ReactNode }) {
             { opacity: 1, y: 0, duration: 0.62, stagger: 0.085, ease: 'power3.out' },
             2.08,
           )
+        const skip = () => intro?.progress(1)
+        const events = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const
+        events.forEach((event) =>
+          window.addEventListener(event, skip, { capture: true, passive: true }),
+        )
+        removeSkipListeners = () => {
+          events.forEach((event) => window.removeEventListener(event, skip, true))
+        }
       }
-      const skip = () => {
-        if (!completed.current) intro?.progress(1)
-      }
-      const events = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const
-      events.forEach((event) =>
-        window.addEventListener(event, skip, { capture: true, passive: true }),
-      )
       gsap.utils.toArray<HTMLElement>('[data-reveal]', scope.current).forEach((element) => {
         gsap.from(element, {
           y: 24,
@@ -89,7 +92,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
         })
       })
       return () => {
-        events.forEach((event) => window.removeEventListener(event, skip, true))
+        removeSkipListeners?.()
       }
     },
     { scope, dependencies: [motionPaused], revertOnUpdate: true },

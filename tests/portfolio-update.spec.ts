@@ -106,7 +106,7 @@ test('a nova capa é usada sem corte no cartão e nos detalhes do projeto', asyn
 
   const cover = page.locator('.project-art > img')
   const feather = page.locator('.project-caption-feather')
-  await expect(cover).toHaveAttribute('src', '/images/projects/capa_retangular_mitos_e_raizes.png')
+  await expect(cover).toHaveAttribute('src', '/images/projects/capa_retangular_mitos_e_raizes.webp')
   await expect(cover).toHaveCSS('object-fit', 'contain')
   await expect(feather).toHaveAttribute('alt', '')
   await expect(feather).toHaveAttribute('aria-hidden', 'true')
@@ -118,14 +118,14 @@ test('a nova capa é usada sem corte no cartão e nos detalhes do projeto', asyn
   expect(featherResponse.status()).toBe(200)
   const darkFilter = await feather.evaluate((image) => getComputedStyle(image).filter)
   await page.getByRole('button', { name: 'Ativar tema claro' }).click()
-  const lightFilter = await feather.evaluate((image) => getComputedStyle(image).filter)
-  expect(lightFilter).not.toBe(darkFilter)
+  await expect(feather).toHaveCSS('filter', 'invert(1)')
+  expect(darkFilter).toBe('invert(0)')
   await page.getByRole('button', { name: 'Um olhar mais de perto' }).click()
   const dialog = page.getByRole('dialog', { name: 'Entre Mitos e Raízes' })
   await expect(dialog).toBeVisible()
   await expect(dialog.locator('img')).toHaveAttribute(
     'src',
-    '/images/projects/capa_retangular_mitos_e_raizes.png',
+    '/images/projects/capa_retangular_mitos_e_raizes.webp',
   )
 })
 

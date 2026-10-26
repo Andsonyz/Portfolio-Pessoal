@@ -149,3 +149,86 @@ test('API coalesce consultas simultâneas, respeita TTL e troca a janela UTC', a
   expect((await next.json()).since).toBe('2026-09-25T00:00:00.000Z')
   expect(calls).toBe(3)
 })
+
+test('cache CDN e respostas reaproveitadas expiram antes da virada UTC', async () => {
+  let clock = new Date('2026-10-23T23:59:40Z')
+  const handler = createVisitorsReader(
+    () => env,
+    async (input) => {
+      const url = new URL(String(input))
+      return Response.json({
+        query: { since: url.searchParams.get('since'), until: url.searchParams.get('until') },
+        data: { visitors: 7 },
+      })
+    },
+    () => clock,
+  )
+  expect((await handler(request())).headers.get('Cache-Control')).toContain('s-maxage=20')
+  clock = new Date('2026-10-23T23:59:55Z')
+  expect((await handler(request())).headers.get('Cache-Control')).toContain('s-maxage=5')
+  clock = new Date('2026-10-24T00:00:00Z')
+  const next = await handler(request())
+  expect((await next.json()).until).toBe('2026-10-25T00:00:00.000Z')
+})
+
+test('falhas têm cooldown local sem cache público, preservam diagnóstico e permitem recuperação', async () => {
+  let clock = new Date(now)
+  let calls = 0
+  const logs: string[] = []
+  const handler = createVisitorsReader(
+    () => env,
+    async () => {
+      calls++
+      return calls === 1
+        ? new Response('private detail', { status: 403 })
+        : Response.json({ query, data: { visitors: 8 } })
+    },
+    () => clock,
+    (code) => logs.push(code),
+  )
+  const first = await handler(request())
+  expect(first.status).toBe(503)
+  expect(first.headers.get('Cache-Control')).toBe('no-store')
+  clock = new Date(now.getTime() + 10000)
+  const retry = await handler(request())
+  expect(retry.status).toBe(503)
+  expect(retry.headers.get('Retry-After')).toBe('20')
+  expect(calls).toBe(1)
+  expect(logs).toEqual(['upstream_auth'])
+  clock = new Date(now.getTime() + 30001)
+  expect((await (await handler(request())).json()).total).toBe(8)
+  expect(calls).toBe(2)
+})
+
+test('resposta antiga da virada UTC não cancela o cooldown de uma consulta mais recente', async () => {
+  let clock = new Date('2026-10-23T23:59:59Z')
+  let calls = 0
+  let release = () => {}
+  const held = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  const handler = createVisitorsReader(
+    () => env,
+    async (input) => {
+      calls++
+      const url = new URL(String(input))
+      if (calls !== 1) return new Response(null, { status: 403 })
+      await held
+      return Response.json({
+        query: { since: url.searchParams.get('since'), until: url.searchParams.get('until') },
+        data: { visitors: 7 },
+      })
+    },
+    () => clock,
+    () => {},
+  )
+  const previous = handler(request())
+  clock = new Date('2026-10-24T00:00:01Z')
+  expect((await handler(request())).status).toBe(503)
+  release()
+  const oldResponse = await previous
+  expect(oldResponse.status).toBe(200)
+  expect(oldResponse.headers.get('Cache-Control')).toContain('s-maxage=0')
+  expect((await handler(request())).status).toBe(503)
+  expect(calls).toBe(2)
+})

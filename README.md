@@ -22,6 +22,10 @@ A prévia de produção usa **http://127.0.0.1:4173**. O resultado está em `dis
 
 Com a prévia de produção em execução, `npm run test:production` verifica o bundle gerado, os seis projetos, suas imagens, a política de segurança e a ausência de requisições a terceiros.
 
+A [auditoria técnica de 26/10/2026](docs/repository-audit.md) registra inventário, limpeza, dependências, memória, segurança e comparações de tamanho. Para repetir o ensaio de carregamento e retenção de memória, com o preview ativo e sem outros testes/builds concorrentes, execute `node scripts/audit-runtime.mjs nome-do-ensaio`. Requer Microsoft Edge; os resultados locais ficam em `.verification/audit/runtime-nome-do-ensaio.json`. Esse ensaio não equivale ao Lighthouse, a métricas de campo ou a medição de memória da GPU.
+
+O Tailwind detecta utilitários somente em `src/` e `index.html`, conforme `src/styles/global.css`. Se acrescentar templates fora desses locais, registre a origem com `@source`; documentação e testes não devem gerar CSS de produção.
+
 ## Comandos de qualidade
 
 ```bash
@@ -96,7 +100,7 @@ O período acadêmico é um dado informado, não calculado automaticamente. Atua
 
 ### Foto
 
-A foto fornecida está em `public/images/profile/FotoParaPerfil.png`, servida pelo caminho `/images/profile/FotoParaPerfil.png`. A cópia pública mantém todos os pixels do PNG original; somente metadados de captura e bytes posteriores ao fim da imagem foram removidos. O original foi preservado fora do projeto, na pasta do anexo da atualização (`FotoParaPerfil.original.png`). O Vite procura, nesta ordem: a foto fornecida, `public/images/perfil.png` e `public/images/profile/andson.jpg`. Ao adicionar, substituir o caminho ou remover uma foto, **reinicie o servidor** ou faça novo build, pois a disponibilidade é verificada em `vite.config.ts`.
+A foto fornecida está em `public/images/profile/FotoParaPerfil.webp`, servida pelo caminho `/images/profile/FotoParaPerfil.webp`. A conversão WebP lossless mantém exatamente os pixels e as dimensões de 840 × 840 do PNG sanitizado anterior, sem metadados pessoais. Esse PNG foi preservado localmente em `.verification/audit/originals/`, ignorada pelo Git; o arquivo também permanece no histórico anterior. O Vite procura, nesta ordem: `FotoParaPerfil.webp`, `FotoParaPerfil.png` na mesma pasta, `public/images/perfil.png` e `public/images/profile/andson.jpg`. Ao adicionar, substituir o caminho ou remover uma foto, **reinicie o servidor** ou faça novo build, pois a disponibilidade é verificada em `vite.config.ts`.
 
 A apresentação é circular, responsiva, com `object-fit: cover` e escala de cinza aplicada somente pelo CSS. Falha de carregamento exibe o monograma AR. O botão da foto responde a clique, toque, Enter e Espaço; gira 720° no eixo **Y** em 1,6 segundo, desacelera e retorna à orientação original. As duas faces usam a mesma foto, para evitar o espelhamento durante o giro. Cliques durante o movimento são ignorados. O halo é uma camada separada e acompanha somente mouse fino; pausa e movimento reduzido desativam esses efeitos.
 
@@ -108,7 +112,7 @@ Adicione `public/documents/curriculo-andson-rocha.pdf` e **reinicie o servidor**
 
 Cada registro segue `Project` em `src/types/content.ts`: `id`, `title`, `category`, `description`, `technologies`, `highlights`, `image` e `imageAlt`. `detailsSections`, `repository` e `liveUrl` são opcionais; os links devem ser destinos HTTPS públicos reais. Coloque imagens próprias em `public/images/projects/` e use caminhos como `/images/projects/nome.webp`.
 
-Os SVGs atuais são **ilustrações conceituais**, não screenshots de sistemas. Entre Mitos e Raízes utiliza a nova capa fornecida `capa_retangular_mitos_e_raizes.png` (1070 × 622), sem corte, tanto no cartão quanto nos detalhes. A ilustração de Acessibilidade Digital também é conceitual; seu repositório permanece privado e não recebe link público. Ame-Pet e Restaurante Dividão são trabalhos acadêmicos colaborativos de terminal, confirmados nos respectivos repositórios; o portfólio não os apresenta como aplicações web. Os repositórios públicos informados aparecem como links nos cartões e detalhes. Para acrescentar um projeto, edite `src/data/projects.ts`, adicione o arquivo real em `public/images/projects/` e atualize `imageAlt`, `imageWidth`, `imageHeight` e `imageCaption` quando aplicável. Cartão e painel usam a mesma entidade tipada `Project`; somente campos disponíveis são apresentados.
+Os SVGs atuais são **ilustrações conceituais**, não screenshots de sistemas. Entre Mitos e Raízes utiliza a capa fornecida, convertida sem perda para `capa_retangular_mitos_e_raizes.webp` (1070 × 622), sem corte, tanto no cartão quanto nos detalhes. A ilustração de Acessibilidade Digital também é conceitual; seu repositório permanece privado e não recebe link público. Ame-Pet e Restaurante Dividão são trabalhos acadêmicos colaborativos de terminal, confirmados nos respectivos repositórios; o portfólio não os apresenta como aplicações web. Os repositórios públicos informados aparecem como links nos cartões e detalhes. Para acrescentar um projeto, edite `src/data/projects.ts`, adicione o arquivo real em `public/images/projects/` e atualize `imageAlt`, `imageWidth`, `imageHeight` e `imageCaption` quando aplicável. Cartão e painel usam a mesma entidade tipada `Project`; somente campos disponíveis são apresentados.
 
 “Um olhar mais de perto” abre um dialog nativo com capa e informações lado a lado no desktop, e uma coluna no mobile. O conteúdo tem rolagem interna; Escape e o botão de fechar devolvem o foco à origem. A página principal fica com rolagem bloqueada enquanto o painel está aberto. Entrada e saída respeitam pausa e movimento reduzido.
 
@@ -143,7 +147,7 @@ Os tokens claro/escuro ficam no início de `src/styles/global.css`. Use apenas p
 
 As quantidades, tamanhos, raio/força de repulsão, tempos da digitação e parâmetros da foto ficam em **`src/data/motion.ts`**. A timeline Welcome fica em `PageMotion.tsx`, e os estilos do corte em V ficam em `global.css`. A assinatura do nome usa **Space Grotesk**, em caixa alta, peso 600 e espaçamento ajustado; Manrope continua nos textos e controles. Nenhuma nova família ou dependência foi instalada nesta atualização.
 
-Os SVGs atuais são recursos fornecidos pelo proprietário; o gerador antigo `scripts/generate-feathers.mjs` não produz esse conjunto e não faz parte do fluxo de build.
+Os seis SVGs atuais são recursos fornecidos pelo proprietário. O gerador legado das duas penas antigas foi removido na auditoria; as penas atuais não dependem de geração durante o build.
 
 ### Desempenho de rolagem
 
@@ -181,7 +185,7 @@ O cabeçalho contém um contador inicialmente oculto, com EyeOff e máscara. Rev
 
 A fonte é a [API oficial de Web Analytics da Vercel](https://vercel.com/docs/analytics/web-analytics-api), consultada no servidor. O projeto existente retornou `data.visitors` e `data.pageviews` no conector em 23/10/2026. A interface usa **visitantes estimados nos últimos 30 dias de calendário UTC, incluindo hoje** (`estimated_unique_visitors`, `last_30_days`). A [identificação anônima da Vercel](https://vercel.com/docs/analytics/privacy-policy) se renova após 24 horas; portanto, a mesma pessoa pode integrar o agregado mais de uma vez ao longo dos 30 dias. Não é um total de pessoas únicas de toda a vida do site. A janela começa à meia-noite UTC de 29 dias atrás e termina à meia-noite de amanhã; o dia atual está incompleto. Retenção, início da coleta, bloqueadores e disponibilidade da conta limitam os registros disponíveis.
 
-A coleta e persistência continuam sob responsabilidade do Vercel Web Analytics e sobrevivem a deploys. Não há banco adicional, incremento pelo cliente ou endpoint de gravação. O endpoint público mostra somente o agregado, as datas da janela e `updatedAt`. Cache CDN de cinco minutos e agrupamento de consultas simultâneas por instância reduzem chamadas; não são um limite global de requisições. O cliente não escolhe projeto, filtros ou período. Métodos de escrita e parâmetros são rejeitados; token, detalhes dos erros upstream e dados individuais não são devolvidos. Logs do servidor contêm somente códigos de diagnóstico e status HTTP. Timeout no servidor: 5 s; cliente: 6,5 s. Não foram adicionados cookies, IDs pessoais ou fingerprinting.
+A coleta e persistência continuam sob responsabilidade do Vercel Web Analytics e sobrevivem a deploys. Não há banco adicional, incremento pelo cliente ou endpoint de gravação. O endpoint público mostra somente o agregado, as datas da janela e `updatedAt`. O cache dura até cinco minutos e expira até a próxima meia-noite UTC; respostas reutilizadas recebem somente o TTL restante. Consultas simultâneas são agrupadas por instância. Falhas continuam como HTTP 503, `no-store` e diagnóstico seguro; um cooldown local de 30 segundos reduz novas consultas durante a falha e informa o tempo restante em `Retry-After`. Isso não é um limite global de requisições. O cliente não escolhe projeto, filtros ou período. Métodos de escrita e parâmetros são rejeitados; token, detalhes dos erros upstream e dados individuais não são devolvidos. Logs do servidor contêm somente códigos de diagnóstico e status HTTP. Timeout no servidor: 5 s; cliente: 6,5 s. Não foram adicionados cookies, IDs pessoais ou fingerprinting.
 
 ### Configuração do contador
 

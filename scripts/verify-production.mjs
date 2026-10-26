@@ -22,17 +22,20 @@ try {
   await page.goto('http://127.0.0.1:4173/')
   await page.getByRole('heading', { name: /^ANDSON\s*ROCHA\.$/ }).waitFor()
   const photo = page.getByRole('img', { name: 'Andson Rocha', exact: true })
-  assert.equal(await photo.getAttribute('src'), '/images/profile/FotoParaPerfil.png')
+  assert.equal(await photo.getAttribute('src'), '/images/profile/FotoParaPerfil.webp')
   assert.ok(await photo.evaluate((image) => image.complete && image.naturalWidth > 0))
-  const imageBytes = await readFile('dist/images/profile/FotoParaPerfil.png')
-  let imageEnd = 8
+  const imageBytes = await readFile('dist/images/profile/FotoParaPerfil.webp')
+  assert.equal(imageBytes.toString('ascii', 0, 4), 'RIFF')
+  assert.equal(imageBytes.toString('ascii', 8, 12), 'WEBP')
+  assert.equal(imageBytes.readUInt32LE(4) + 8, imageBytes.length)
+  let imageEnd = 12
   while (imageEnd < imageBytes.length) {
-    const type = imageBytes.toString('ascii', imageEnd + 4, imageEnd + 8)
-    assert.ok(!['eXIf', 'tEXt', 'zTXt', 'iTXt'].includes(type), `Private photo metadata: ${type}`)
-    imageEnd += imageBytes.readUInt32BE(imageEnd) + 12
-    if (type === 'IEND') break
+    const type = imageBytes.toString('ascii', imageEnd, imageEnd + 4)
+    assert.ok(!['EXIF', 'XMP '].includes(type), `Private photo metadata: ${type}`)
+    const length = imageBytes.readUInt32LE(imageEnd + 4)
+    imageEnd += 8 + length + (length % 2)
   }
-  assert.equal(imageEnd, imageBytes.length, 'Unexpected data after the PNG image')
+  assert.equal(imageEnd, imageBytes.length, 'Unexpected data after the WebP image')
   await page.getByRole('button', { name: 'Ativar tema claro' }).click()
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light')
   assert.equal(await page.locator('main > section').count(), 9)
@@ -79,10 +82,10 @@ try {
     assert.ok(response.headers()['content-type'].includes('image/svg+xml'))
   }
   const coverResponse = await page.request.get(
-    'http://127.0.0.1:4173/images/projects/capa_retangular_mitos_e_raizes.png',
+    'http://127.0.0.1:4173/images/projects/capa_retangular_mitos_e_raizes.webp',
   )
   assert.equal(coverResponse.status(), 200)
-  assert.ok(coverResponse.headers()['content-type'].includes('image/png'))
+  assert.ok(coverResponse.headers()['content-type'].includes('image/webp'))
   const accessibilityArtResponse = await page.request.get(
     'http://127.0.0.1:4173/images/projects/acessibilidade.svg',
   )

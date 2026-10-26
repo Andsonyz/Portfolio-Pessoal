@@ -5,4 +5,5 @@ public/images
 test-results
 playwright-report
 .verification
+.superpowers
 *.log

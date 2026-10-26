@@ -27,7 +27,7 @@ export const projects: Project[] = [
         ],
       },
     ],
-    image: '/images/projects/capa_retangular_mitos_e_raizes.png',
+    image: '/images/projects/capa_retangular_mitos_e_raizes.webp',
     imageAlt:
       'Capa do jogo Entre Mitos e Raízes, com uma floresta, um explorador e o título do projeto.',
     imageWidth: 1070,

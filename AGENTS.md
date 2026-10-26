@@ -16,7 +16,7 @@
 - Faça cleanup de animações e listeners. Respeite `prefers-reduced-motion` e o controle de pausa. Nunca bloqueie a navegação para exibir uma abertura.
 - A troca de tema deve revelar a interface inteira. Preserve o fallback imediato quando View Transitions não existir. Ela não pode reiniciar a abertura.
 - Controles precisam funcionar por teclado, ter foco visível e área de toque adequada. Carrossel não pode capturar teclas de controles internos nem bloquear zoom por pinça.
-- Foto e currículo dependem de presença real no disco; Vite verifica em `vite.config.ts`, exigindo reinício/build após adicionar esses arquivos.
+- Foto e currículo dependem de presença real no disco; Vite verifica em `vite.config.ts`, exigindo reinício/build após adicionar esses arquivos. A foto pública usa WebP lossless, com os caminhos PNG/JPG anteriores mantidos como alternativas opcionais.
 - Mantenha projetos, experiências, habilidades, faixas e rótulos do relógio centralizados em `src/data`. Não atribua datas aos novos projetos sem confirmação. Node.js é ambiente de execução, não linguagem independente.
 - O retrato gira no eixo Y com faces circulares; o halo permanece em camada separada. Faixas pausam por preferência do usuário, movimento reduzido e guia oculta. O relógio usa `America/Fortaleza` e horário real.
 
@@ -27,6 +27,7 @@
 - Mantenha o servidor local restrito a `127.0.0.1` por padrão.
 - Preserve a CSP e os cabeçalhos em `public/_headers`. Configuração de produção deve usar cabeçalhos do host quando `_headers` não for suportado.
 - O contador lê `data.visitors` da API oficial Vercel somente no servidor. Token `ANALYTICS_READ_TOKEN` nunca entra em `VITE_*`; `ANALYTICS_PROJECT_ID` e `ANALYTICS_TEAM_ID` configuram o escopo. O agregado de 30 dias é estimado, pois a identificação anônima se renova após 24 horas. Não rotule como pessoas únicas definitivas.
+- O cache do contador respeita o TTL restante e a virada UTC. Falhas retornam 503 sem cache público, com cooldown de 30 segundos por instância; não tratá-lo como um limite global.
 
 ## Verificação
 

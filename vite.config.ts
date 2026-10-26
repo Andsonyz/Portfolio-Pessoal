@@ -18,13 +18,14 @@ export default defineConfig({
   ],
   define: {
     __PROFILE_IMAGE__: JSON.stringify(
-      existsSync('public/images/profile/FotoParaPerfil.png')
-        ? '/images/profile/FotoParaPerfil.png'
-        : existsSync('public/images/perfil.png')
-          ? '/images/perfil.png'
-          : existsSync('public/images/profile/andson.jpg')
-            ? '/images/profile/andson.jpg'
-            : null,
+      [
+        'public/images/profile/FotoParaPerfil.webp',
+        'public/images/profile/FotoParaPerfil.png',
+        'public/images/perfil.png',
+        'public/images/profile/andson.jpg',
+      ]
+        .find((file) => existsSync(file))
+        ?.replace(/^public/, '') ?? null,
     ),
     __RESUME_URL__: JSON.stringify(
       existsSync('public/documents/curriculo-andson-rocha.pdf')

@@ -19,12 +19,30 @@ type Logger = (code: Failure, status?: number) => void
 const silent: Logger = () => undefined
 const dayMs = 86400000
 
-function unavailable(logger: Logger, code: Failure, status?: number): Response {
-  logger(code, status)
+function cacheExpiry(now: Date): number {
+  const midnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
+  return Math.min(now.getTime() + 300000, midnight)
+}
+
+function successHeaders(expires: number, now: Date) {
+  const ttl = Math.max(0, Math.floor((expires - now.getTime()) / 1000))
+  return {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': `public, max-age=0, s-maxage=${ttl}`,
+    'X-Content-Type-Options': 'nosniff',
+  }
+}
+
+function failureResponse(retryAfter = 30): Response {
   return Response.json(
     { error: 'temporarily_unavailable' },
-    { status: 503, headers: { 'Cache-Control': 'no-store', 'Retry-After': '30' } },
+    { status: 503, headers: { 'Cache-Control': 'no-store', 'Retry-After': String(retryAfter) } },
   )
+}
+
+function unavailable(logger: Logger, code: Failure, status?: number): Response {
+  logger(code, status)
+  return failureResponse()
 }
 
 // Read-only proxy. Vercel Analytics owns collection, persistence and concurrency.
@@ -107,10 +125,7 @@ export async function readVisitors(
     updatedAt: now.toISOString(),
   }
   return Response.json(result, {
-    headers: {
-      'Cache-Control': 'public, max-age=0, s-maxage=300',
-      'X-Content-Type-Options': 'nosniff',
-    },
+    headers: successHeaders(cacheExpiry(now), now),
   })
 }
 
@@ -124,6 +139,7 @@ export function createVisitorsReader(
 ) {
   let cached: { day: string; body: string; expires: number } | null = null
   let pending: { day: string; promise: Promise<Response> } | null = null
+  let retryAt = 0
   return async (request: Request): Promise<Response> => {
     if (request.method !== 'GET' || new URL(request.url).search)
       return readVisitors(request, getEnv(), fetchAnalytics, getNow(), logger)
@@ -131,20 +147,24 @@ export function createVisitorsReader(
     const day = now.toISOString().slice(0, 10)
     if (cached?.day === day && cached.expires > now.getTime())
       return new Response(cached.body, {
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Cache-Control': 'public, max-age=0, s-maxage=300',
-          'X-Content-Type-Options': 'nosniff',
-        },
+        headers: successHeaders(cached.expires, now),
       })
+    if (retryAt > now.getTime()) return failureResponse(Math.ceil((retryAt - now.getTime()) / 1000))
     if (pending?.day === day) return pending.promise.then((response) => response.clone())
     const promise = readVisitors(request, getEnv(), fetchAnalytics, now, logger).then(
       async (response) => {
         if (response.ok) {
           const body = await response.clone().text()
-          if (getNow().toISOString().slice(0, 10) === day)
-            cached = { day, body, expires: now.getTime() + 300000 }
-        }
+          const servedAt = getNow()
+          const expires = cacheExpiry(now)
+          response.headers.set('Cache-Control', successHeaders(expires, servedAt)['Cache-Control'])
+          // A request spanning midnight must not overwrite a newer day's result or cooldown.
+          if (pending?.promise === promise) {
+            if (servedAt.toISOString().slice(0, 10) === day) cached = { day, body, expires }
+            retryAt = 0
+          }
+        } else if (response.status === 503 && pending?.promise === promise)
+          retryAt = getNow().getTime() + 30000
         return response
       },
     )

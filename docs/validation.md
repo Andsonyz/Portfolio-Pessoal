@@ -315,3 +315,28 @@ O array tipado de projetos passou a fornecer detalhes estruturados em uma única
 - Inspeção visual do preview em **1440 × 900** e **390 × 844**, claro e escuro. Conferi o carrossel e painéis de Ame-Pet e Acessibilidade, textos, legenda com pena e ausência de overflow horizontal. Capturas em `.verification/projects-*.png` e `.verification/*details.png`.
 
 O preview já estava usando a porta 4173; a verificação confirmou que servia o build atual com os seis títulos e a ilustração nova. Não fiz deploy nem push.
+
+## Auditoria técnica — 26/10/2026
+
+Relatório consolidado: [auditoria do repositório](repository-audit.md). Inventariados 110 arquivos versionados no início, com Git limpo. Todos os pacotes diretos têm uso identificado; `npm audit --json` retornou zero vulnerabilidades conhecidas e `npm ls --all` não apontou dependência inválida. Manifesto e lock não foram alterados.
+
+Removidos somente o gerador legado das penas antigas e a capa conceitual `mitos.svg`, sem referências ativas. Foto e capa fornecidas foram convertidas para WebP lossless, com os mesmos pixels/dimensões, economizando juntas 703.266 bytes. PNGs anteriores preservados localmente em `.verification/audit/originals/`. Penas, OG PNG, favicon, fontes e demais capas foram mantidos. Acrescentado ignore portátil de `.superpowers/`; gerados e `.env.local` continuam fora do Git.
+
+Corrigido o crescimento de listeners do retrato ao pausar/retomar; o halo agora usa consulta de mídia nativa com remoção explícita. Quatro listeners de pular a abertura são removidos ao terminar. Cache do contador respeita o TTL restante e a virada UTC; falhas continuam 503/no-store com cooldown local de 30 s. Um teste adicional reproduziu/corrigiu a corrida em que uma resposta antiga apagava um cooldown mais recente. Detecção Tailwind limitada a `src/` e HTML, evitando utilitários derivados de testes/documentação. Não houve mudança de layout, conteúdo ou quantidade de penas.
+
+- `npm run lint`: aprovado sem avisos ESLint.
+- `npm run build`: aprovado, incluindo os projetos TypeScript e Vite.
+- `npm test -- --reporter=line`: **80 testes aprovados em 2,9 minutos**. Baseline tinha 75; testes de listeners/cache/UTC foram observados falhando antes das correções.
+- `npm run format:check`: aprovado.
+- `npm run test:production`: aprovado; nove seções, seis projetos, WebP/SVG/OG acessíveis com MIME correto, CSP, zero erros de console/requisições externas no fluxo oculto.
+- Builder real `@vercel/node`: import `.js` válido e resposta 503 sem configuração; em novo processo com configuração privada, **HTTP 200 e métrica válida**.
+- Navegador no preview com API real, sem interceptação: máscara inicial, resposta 200, formatação pt-BR, ocultação e máscara após reload; sem Authorization no cliente nem `pageerror`.
+- Oito comparações estáticas de Hero/Projetos em desktop/mobile e claro/escuro: **zero pixels diferentes**; também confirmada igualdade dos pixels das duas imagens convertidas.
+- Revisão independente concluída, sem achados Critical/Important; o Minor de concorrência foi corrigido e revalidado. Uma leitura imediata de filtro em teste antigo foi substituída por espera do estado CSS final, mantendo a asserção.
+- `git diff --check` e comparação de manifesto/lock: aprovados; somente avisos Windows de LF/CRLF.
+
+Build total: 3.734.886 → 3.029.991 bytes. Recursos iniciais medidos: 1.156.390 → 829.413 bytes, mantendo 13 recursos. JS cresceu 53 bytes e CSS diminuiu 269 bytes; não se atribui redução ao bundle JS. Listeners ficaram em 317 nos pontos 0/5/10/15 ciclos de interação após aguardar callbacks e GC; antes cresciam de 322 para 337. Nós DOM ficaram constantes. O heap e os tempos de tarefas variaram; medições completas, inclusive resultados piores, estão no relatório/evidências e não equivalem a Lighthouse, INP de campo ou prova absoluta de ausência de vazamentos.
+
+Penas, abertura, foto/halo/giro, tema em V, typing, faixas, navegação, dados, contatos/Instagram, relógio, contador e metadados foram preservados. Não houve publicação, push, alteração de segredos ou infraestrutura. Testes físicos, leitor de tela real, Safari/Firefox e validação de um futuro deployment permanecem fora desta execução local. Evidências em `.verification/audit/`, ignorada pelo Git.
+
+A varredura final de 154 arquivos (UTF-8/UTF-16LE), bundle e histórico inspecionado não encontrou o valor do token local; o endpoint administrativo também está ausente do cliente. Há uma pendência de limpeza local: a revisão automática rejeitou a exclusão dos diretórios temporários `.verification/audit-tools/` e `.verification/function-fixture-audit/` com “blocked by policy”, mesmo após conferir seus caminhos. Eles permanecem ignorados e fora do build, conforme detalhado no relatório.

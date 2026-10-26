@@ -123,7 +123,7 @@ test('foto real fornecida é carregada sem distorção', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   const photo = page.getByRole('img', { name: 'Andson Rocha', exact: true })
-  await expect(photo).toHaveAttribute('src', '/images/profile/FotoParaPerfil.png')
+  await expect(photo).toHaveAttribute('src', '/images/profile/FotoParaPerfil.webp')
   expect(await photo.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(
     0,
   )
@@ -181,7 +181,7 @@ test('penas têm densidade responsiva, repulsão suave e retorno', async ({ page
 })
 
 test('falha de carregamento da foto mostra o monograma acessível', async ({ page }) => {
-  await page.route('**/images/profile/FotoParaPerfil.png', (route) => route.abort())
+  await page.route('**/images/profile/FotoParaPerfil.webp', (route) => route.abort())
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   await expect(page.getByRole('img', { name: /Monograma AR, espaço reservado/ })).toBeVisible()

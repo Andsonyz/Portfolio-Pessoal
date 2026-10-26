@@ -10,5 +10,6 @@ playwright-report/
 *.tsbuildinfo
 .DS_Store
 .verification/
+.superpowers/
 
 .vercel/

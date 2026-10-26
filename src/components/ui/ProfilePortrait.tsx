@@ -32,49 +32,46 @@ export function ProfilePortrait() {
           },
         },
       )
-      const media = gsap.matchMedia()
-      media.add('(hover: hover) and (pointer: fine)', () => {
-        const halo = frame.current!.querySelector('.portrait-halo')!
-        const xTo = gsap.quickTo(halo, 'x', { duration: 0.65, ease: 'power3.out' })
-        const yTo = gsap.quickTo(halo, 'y', { duration: 0.65, ease: 'power3.out' })
-        const opacityTo = gsap.quickTo(halo, 'opacity', { duration: 0.5, ease: 'power2.out' })
-        let rect = frame.current!.getBoundingClientRect()
-        let dirty = false
-        const invalidate = () => {
-          dirty = true
+      const media = window.matchMedia('(hover: hover) and (pointer: fine)')
+      const halo = frame.current!.querySelector('.portrait-halo')!
+      const xTo = gsap.quickTo(halo, 'x', { duration: 0.65, ease: 'power3.out' })
+      const yTo = gsap.quickTo(halo, 'y', { duration: 0.65, ease: 'power3.out' })
+      const opacityTo = gsap.quickTo(halo, 'opacity', { duration: 0.5, ease: 'power2.out' })
+      let rect = frame.current!.getBoundingClientRect()
+      let dirty = false
+      const invalidate = () => {
+        dirty = true
+      }
+      const leave = () => opacityTo(0)
+      const move = (event: PointerEvent) => {
+        if (event.pointerType !== 'mouse' || !media.matches) return
+        if (dirty) {
+          rect = frame.current!.getBoundingClientRect()
+          dirty = false
         }
-        const leave = () => opacityTo(0)
-        const move = (event: PointerEvent) => {
-          if (event.pointerType !== 'mouse') return
-          if (dirty) {
-            rect = frame.current!.getBoundingClientRect()
-            dirty = false
-          }
-          const dx = event.clientX - rect.left - rect.width / 2
-          const dy = event.clientY - rect.top - rect.height / 2
-          const radius = rect.width / 2 + motionSettings.portrait.haloRadius
-          if (Math.abs(dx) > radius || Math.abs(dy) > radius) {
-            leave()
-            return
-          }
-          const strength = Math.max(0, 1 - Math.hypot(dx, dy) / radius)
-          xTo(gsap.utils.clamp(-1, 1, dx / (rect.width / 2)) * motionSettings.portrait.haloTravel)
-          yTo(gsap.utils.clamp(-1, 1, dy / (rect.height / 2)) * motionSettings.portrait.haloTravel)
-          opacityTo(strength * 0.38)
+        const dx = event.clientX - rect.left - rect.width / 2
+        const dy = event.clientY - rect.top - rect.height / 2
+        const radius = rect.width / 2 + motionSettings.portrait.haloRadius
+        if (Math.abs(dx) > radius || Math.abs(dy) > radius) {
+          leave()
+          return
         }
-        window.addEventListener('pointermove', move, { passive: true })
-        document.addEventListener('pointerleave', leave)
-        window.addEventListener('scroll', invalidate, { passive: true })
-        window.addEventListener('resize', invalidate, { passive: true })
-        return () => {
-          window.removeEventListener('pointermove', move)
-          document.removeEventListener('pointerleave', leave)
-          window.removeEventListener('scroll', invalidate)
-          window.removeEventListener('resize', invalidate)
-        }
-      })
+        const strength = Math.max(0, 1 - Math.hypot(dx, dy) / radius)
+        xTo(gsap.utils.clamp(-1, 1, dx / (rect.width / 2)) * motionSettings.portrait.haloTravel)
+        yTo(gsap.utils.clamp(-1, 1, dy / (rect.height / 2)) * motionSettings.portrait.haloTravel)
+        opacityTo(strength * 0.38)
+      }
+      window.addEventListener('pointermove', move, { passive: true })
+      document.addEventListener('pointerleave', leave)
+      window.addEventListener('scroll', invalidate, { passive: true })
+      window.addEventListener('resize', invalidate, { passive: true })
+      media.addEventListener('change', leave)
       return () => {
-        media.revert()
+        window.removeEventListener('pointermove', move)
+        document.removeEventListener('pointerleave', leave)
+        window.removeEventListener('scroll', invalidate)
+        window.removeEventListener('resize', invalidate)
+        media.removeEventListener('change', leave)
         spin.current = null
         control.setAttribute('aria-busy', 'false')
       }
