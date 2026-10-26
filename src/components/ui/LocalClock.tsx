@@ -10,7 +10,7 @@ const formatter = new Intl.DateTimeFormat(clockSettings.locale, {
   second: '2-digit',
 })
 
-export function LocalClock() {
+export function LocalClock({ className = '' }: { className?: string }) {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined
@@ -33,7 +33,7 @@ export function LocalClock() {
     }
   }, [])
   return (
-    <div className="local-clock" aria-live="off">
+    <div className={`local-clock ${className}`} aria-live="off">
       <span className="clock-label">{clockSettings.label}</span>
       <time dateTime={now.toISOString()}>{formatter.format(now)}</time>
       <span className="clock-zone">{clockSettings.zoneLabel}</span>

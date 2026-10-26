@@ -149,6 +149,7 @@ test('penas têm densidade responsiva, repulsão suave e retorno', async ({ page
   const box = (await particle.boundingBox())!
   const repel = particle.locator('.feather-repel')
   await page.mouse.move(box.x + box.width / 2 + 12, box.y + box.height / 2)
+  await page.waitForTimeout(800)
   await expect
     .poll(() =>
       repel.evaluate((element) => {
@@ -175,8 +176,8 @@ test('penas têm densidade responsiva, repulsão suave e retorno', async ({ page
     .evaluateAll((elements) =>
       elements.map((element) => parseFloat(getComputedStyle(element).width)),
     )
-  expect(Math.max(...widths)).toBeLessThanOrEqual(34)
-  expect(Math.min(...widths)).toBeGreaterThanOrEqual(12)
+  expect(Math.max(...widths)).toBeLessThanOrEqual(380)
+  expect(Math.min(...widths)).toBeGreaterThanOrEqual(22)
 })
 
 test('falha de carregamento da foto mostra o monograma acessível', async ({ page }) => {

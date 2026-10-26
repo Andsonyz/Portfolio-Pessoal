@@ -1,14 +1,17 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { professionalRoles, motionSettings } from '../../data/motion'
 import { usePreferences } from '../../hooks/usePreferences'
 
 export function Typewriter() {
+  const [expanded, setExpanded] = useState(false)
   const text = useRef<HTMLSpanElement>(null)
+  const container = useRef<HTMLDivElement>(null)
   const { motionPaused } = usePreferences()
   useEffect(() => {
     const element = text.current
     if (!element) return
-    if (motionPaused) {
+    if (motionPaused || expanded) {
       element.textContent = professionalRoles[0]
       return
     }
@@ -17,7 +20,14 @@ export function Typewriter() {
     let length = 0
     let deleting = false
     let started = false
+    let inView = false
     const { character, erase, hold, gap } = motionSettings.typing
+    let remainingDelay: number = character
+    let dueAt = 0
+    const schedule = (delay: number) => {
+      dueAt = performance.now() + delay
+      timer = setTimeout(tick, delay)
+    }
     const tick = () => {
       const title = professionalRoles[role]!
       length += deleting ? -1 : 1
@@ -31,35 +41,51 @@ export function Typewriter() {
         role = (role + 1) % professionalRoles.length
         delay = gap
       }
-      timer = setTimeout(tick, delay)
+      schedule(delay)
     }
     const start = () => {
-      if (started || document.hidden || document.documentElement.dataset.introState !== 'complete')
+      if (
+        started ||
+        !inView ||
+        document.hidden ||
+        document.documentElement.dataset.introState !== 'complete'
+      )
         return
       started = true
-      timer = setTimeout(tick, character)
+      schedule(remainingDelay)
     }
     const onVisibility = () => {
-      if (document.hidden) {
+      if (document.hidden || !inView) {
+        if (started) remainingDelay = Math.max(0, dueAt - performance.now())
         clearTimeout(timer)
         started = false
       } else start()
     }
     element.textContent = ''
-    start()
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry?.isIntersecting ?? false
+        onVisibility()
+      },
+      { rootMargin: '100px' },
+    )
+    if (container.current) observer.observe(container.current)
     window.addEventListener('ar:intro-complete', start)
     document.addEventListener('visibilitychange', onVisibility)
     return () => {
       clearTimeout(timer)
+      observer.disconnect()
       window.removeEventListener('ar:intro-complete', start)
       document.removeEventListener('visibilitychange', onVisibility)
     }
-  }, [motionPaused])
+  }, [motionPaused, expanded])
 
   return (
-    <div className="hero-roles" data-intro>
-      <p className="eyebrow">Áreas que exploro</p>
-      <span className="sr-only">Áreas de interesse: {professionalRoles.join(', ')}.</span>
+    <div ref={container} className="hero-roles" data-intro data-expanded={expanded}>
+      <p className="eyebrow">Áreas que eu exploro</p>
+      <span className="sr-only" aria-hidden={expanded}>
+        Áreas de interesse: {professionalRoles.join(', ')}.
+      </span>
       <div className="role-line">
         <span className="role-reserve" aria-hidden="true">
           Full-stack Developer<span className="typewriter-cursor">|</span>
@@ -71,6 +97,31 @@ export function Typewriter() {
           <span className="typewriter-cursor">|</span>
         </span>
       </div>
+      <div
+        className="role-expansion"
+        data-expanded={expanded}
+        aria-hidden={!expanded}
+        inert={!expanded}
+        id="all-explored-areas"
+      >
+        <div>
+          <ul>
+            {professionalRoles.map((role) => (
+              <li key={role}>{role}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <button
+        type="button"
+        className="areas-toggle"
+        aria-expanded={expanded}
+        aria-controls="all-explored-areas"
+        onClick={() => setExpanded((value) => !value)}
+      >
+        {expanded ? 'Mostrar menos' : 'Mostrar tudo'}
+        <ChevronDown aria-hidden="true" size={14} />
+      </button>
     </div>
   )
 }

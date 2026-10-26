@@ -1,13 +1,17 @@
 import { useRef, useState, type KeyboardEvent, type TouchEvent } from 'react'
-import { ArrowLeft, ArrowRight, ArrowUpRight, Plus } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ArrowUpRight, Eye } from 'lucide-react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { projects } from '../../data/projects'
 import { usePreferences } from '../../hooks/usePreferences'
+import { ProjectDetailDialog } from './ProjectDetailDialog'
+import type { Project } from '../../types/content'
 import { ExternalLink } from '../ui/ExternalLink'
 
 export function ProjectCarousel() {
   const [index, setIndex] = useState(0)
+  const [detailProject, setDetailProject] = useState<Project | null>(null)
+  const detailTrigger = useRef<HTMLButtonElement>(null)
   const direction = useRef(1)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const slide = useRef<HTMLDivElement>(null)
@@ -81,10 +85,25 @@ export function ProjectCarousel() {
         }}
       >
         <figure className="project-art">
-          <img src={project.image} alt={project.imageAlt} width="900" height="680" loading="lazy" />
+          <img
+            src={project.image}
+            alt={project.imageAlt}
+            width={project.imageWidth ?? 900}
+            height={project.imageHeight ?? 680}
+            loading="lazy"
+            className={project.id === 'mitos-raizes' ? 'mitos-cover' : undefined}
+          />
           <figcaption>
-            <span>ESTUDO VISUAL / 0{index + 1}</span>
-            <span>Ilustração conceitual</span>
+            <span className="project-art-index">ESTUDO VISUAL / 0{index + 1}</span>
+            <img
+              className="project-caption-feather"
+              src="/images/feathers/pena_03_pluma_delicada.svg"
+              alt=""
+              aria-hidden="true"
+              width="32"
+              height="24"
+            />
+            <span>{project.imageCaption ?? 'Ilustração conceitual'}</span>
           </figcaption>
         </figure>
         <div
@@ -96,32 +115,30 @@ export function ProjectCarousel() {
           <span className="eyebrow">{project.category}</span>
           <h3>{project.title}</h3>
           <p className="project-description">{project.description}</p>
-          <ul className="project-technologies" aria-label="Tecnologias e métodos">
-            {project.technologies.map((technology) => (
-              <li key={technology}>{technology}</li>
-            ))}
-          </ul>
-          <details className="project-details" key={project.id}>
-            <summary>
-              Um olhar mais de perto
-              <Plus size={18} aria-hidden="true" />
-            </summary>
-            <ul>
-              {project.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
+          {project.technologies.length > 0 && (
+            <ul className="project-technologies" aria-label="Tecnologias e métodos">
+              {project.technologies.map((technology) => (
+                <li key={technology}>{technology}</li>
               ))}
             </ul>
-          </details>
+          )}
+          <button
+            ref={detailTrigger}
+            type="button"
+            className="project-detail-trigger"
+            onClick={() => setDetailProject(project)}
+          >
+            Um olhar mais de perto
+            <Eye aria-hidden="true" size={17} />
+          </button>
           {project.repository && (
-            <ExternalLink href={project.repository} className="text-link">
-              Ver repositório
-              <ArrowUpRight size={16} />
+            <ExternalLink href={project.repository} className="text-link project-repository-link">
+              Ver repositório <ArrowUpRight size={16} />
             </ExternalLink>
           )}
           {project.liveUrl && (
             <ExternalLink href={project.liveUrl} className="text-link">
-              Visitar projeto
-              <ArrowUpRight size={16} />
+              Visitar projeto <ArrowUpRight size={16} />
             </ExternalLink>
           )}
         </div>
@@ -161,6 +178,11 @@ export function ProjectCarousel() {
           </button>
         </div>
       </div>
+      <ProjectDetailDialog
+        project={detailProject}
+        triggerRef={detailTrigger}
+        onClose={() => setDetailProject(null)}
+      />
     </div>
   )
 }

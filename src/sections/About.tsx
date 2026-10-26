@@ -1,5 +1,6 @@
 import { profile } from '../data/profile'
 import { SectionHeading } from '../components/ui/SectionHeading'
+import { RadarAccordion } from '../components/ui/RadarAccordion'
 export function About() {
   return (
     <section id="sobre" className="section about-section" tabIndex={-1}>
@@ -38,12 +39,8 @@ export function About() {
             <p key={paragraph}>{paragraph}</p>
           ))}
           <div className="interests">
-            <span className="eyebrow">No meu radar</span>
-            <ul>
-              {profile.interests.map((interest) => (
-                <li key={interest}>{interest}</li>
-              ))}
-            </ul>
+            <h3 className="eyebrow">No meu radar</h3>
+            <RadarAccordion />
           </div>
         </div>
       </div>

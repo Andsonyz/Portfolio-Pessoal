@@ -14,6 +14,7 @@ import { Events } from '../sections/Events'
 import { Contact } from '../sections/Contact'
 import { SectionMarquee } from '../components/animations/SectionMarquee'
 import { sectionMarquees } from '../data/marquees'
+import { WhatsAppFloatingButton } from '../components/ui/WhatsAppFloatingButton'
 
 export function App() {
   return (
@@ -37,6 +38,7 @@ export function App() {
         </main>
         <Footer />
       </PageMotion>
+      <WhatsAppFloatingButton />
     </PreferencesProvider>
   )
 }

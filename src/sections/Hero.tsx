@@ -4,25 +4,24 @@ import { contacts } from '../data/contacts'
 import { ProfilePortrait } from '../components/ui/ProfilePortrait'
 import { Typewriter } from '../components/animations/Typewriter'
 import { ExternalLink } from '../components/ui/ExternalLink'
+import { LocalClock } from '../components/ui/LocalClock'
 
 export function Hero() {
   return (
     <section id="inicio" className="hero" aria-label="Apresentação" tabIndex={-1}>
       <div className="hero-topline" data-intro>
         <span className="eyebrow">Desenvolvimento, design & descobertas</span>
-        <span className="hero-location">
-          PAU DOS FERROS, RN <span className="tiny-cross">+</span>
-        </span>
+        <LocalClock className="hero-clock" />
       </div>
       <div className="hero-grid">
         <div className="hero-name">
           <p className="hero-greeting" data-intro>
-            Olá, eu sou
+            Olá, me chamo
           </p>
           <h1 data-intro>
-            Andson
+            ANDSON
             <br />
-            <span>Rocha.</span>
+            <span>ROCHA.</span>
           </h1>
           <Typewriter />
           <div className="hero-undername" data-intro>

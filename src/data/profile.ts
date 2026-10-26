@@ -1,22 +1,16 @@
 export const profile = {
   name: 'Andson Rocha',
-  title: 'Graduando em Tecnologia da Informação | UFERSA',
+  title: 'Graduando em Tecnologia da Informação na Universidade Federal Rural do Semi-Árido.',
   institution: 'Universidade Federal Rural do Semi-Árido',
   course: 'Bacharelado Interdisciplinar em Tecnologia da Informação',
   campus: 'Pau dos Ferros / RN',
   period: '5º período',
   enrollment: '2024.1',
-  interests: [
-    'Desenvolvimento Full Stack',
-    'Engenharia de Software',
-    'UX/UI Design',
-    'Cloud Computing',
-  ],
   about: [
-    'Sou Andson Rocha, graduando do 5º período do Bacharelado Interdisciplinar em Tecnologia da Informação pela Universidade Federal Rural do Semi-Árido (UFERSA), onde iniciei minha trajetória acadêmica em 2024.',
-    'Tenho interesse em Desenvolvimento Full Stack, Engenharia de Software, UX/UI Design e Cloud Computing. Nos projetos acadêmicos, conecto prática e colaboração, explorando Java, Python, JavaScript, Node.js e tecnologias de desenvolvimento web.',
-    'Também participo de um projeto voltado à acessibilidade digital de pessoas com baixa visão ou cegueira. Essa experiência reforça meu interesse em criar soluções úteis, inclusivas e acessíveis.',
-    'Busco continuar evoluindo tecnicamente por meio da colaboração, da criatividade e da aplicação prática do conhecimento, com atenção à organização e à experiência de quem utiliza cada solução.',
+    'Me chamo Andson e sou estudante do curso Bacharelado Interdisciplinar em Tecnologia da Informação (5º período) pela Universidade Federal Rural do Semi-Árido (UFERSA), onde iniciei essa trajetória acadêmica em 2024.',
+    'No geral, possuo interesse em desenvolvimento Full Stack, com projetos voltados ao desenvolvimento acadêmico, estratégico, inovador e cultural, explorando Java, Python, JavaScript/TypeScript, Node.js e demais tecnologias que compõem o universo de um desenvolvedor Full Stack.',
+    'Atualmente, participo de projetos voltados à acessibilidade digital de pessoas com baixa visão ou cegueira. Essa experiência reforça meu interesse em criar soluções úteis, inclusivas, acessíveis e inovadoras.',
+    'Busco continuar evoluindo profissionalmente por meio da colaboração em projetos que utilizem minha criatividade e a aplicação prática dos conhecimentos adquiridos, com atenção à organização e à experiência de quem utiliza cada solução.',
   ],
 }
 

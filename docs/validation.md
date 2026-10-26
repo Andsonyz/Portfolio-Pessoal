@@ -1,6 +1,6 @@
 # Relatório de validação — Atualização 3 — 22/10/2026
 
-Os registros anteriores abaixo são históricos. A atualização mais recente, com a métrica de visitantes estimados e cinco projetos, está no fim deste documento.
+Os registros abaixo documentam as validações feitas em cada etapa; afirmações sobre quantidades refletem o estado da data registrada. O refinamento atual da aba Projetos, com seis itens, está no fim deste documento.
 
 ## Complemento — Vercel Analytics — 23/10/2026
 
@@ -207,7 +207,7 @@ No Edge, o site público confirmou o mesmo limite de ponta a ponta: após clicar
 
 `src/data/projects.ts` contém cinco itens: Entre Mitos e Raízes, Ame-Pet, Sistema Restaurante Dividão, SAPO e Portfólio Pessoal. Clínica foi removida do conteúdo público e seu SVG conceitual foi retirado. Ame-Pet e Dividão são identificados como acadêmicos, colaborativos e de terminal; descrições e links foram conferidos nos repositórios dos projetos. [Ame-Pet](https://github.com/gabrdsp/Ame-Pet/tree/0af63f26d2f2e7cc1f76bf2a02e2ef508dfab5f1) foi inspecionado no SHA `0af63f2`; `MenuCompraAdocao.java` confirma Strategy, enquanto Factory e Observer ficaram de fora por falta de evidência estrutural. [Restaurante Dividão](https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante/tree/c5adae206062df3c4521b96747dcd48d81e6b9c1) foi inspecionado no SHA `c5adae2`; `cardapio.c`/`pedidos.c` confirmam CRUD, estados e alocação dinâmica. Os novos SVGs são ilustrações conceituais monocromáticas, não screenshots. O carrossel deriva cinco indicadores do array.
 
-A experiência de desenvolvimento para acessibilidade digital aparece como **Em desenvolvimento**, sem data, organização, cargo ou resultado inventado. O texto Sobre Mim foi atualizado em primeira pessoa. Python e Node.js aparecem nas habilidades, com Node.js identificado como ambiente de execução. A foto gira 720° no eixo Y, com duas faces circulares, desaceleração e halo em camada separada. Três faixas reutilizáveis aparecem antes de Habilidades, Projetos e Contato, com alternativa estática e pausa/redução de movimento. O relógio do rodapé usa `Intl.DateTimeFormat`, `America/Fortaleza`, hora real e atualização por segundo.
+A experiência de desenvolvimento para acessibilidade digital aparece como **Em desenvolvimento**, sem data, organização, cargo ou resultado inventado. O texto Sobre Mim foi atualizado em primeira pessoa. Python e Node.js aparecem nas habilidades, com Node.js identificado como ambiente de execução. A foto gira 720° no eixo Y, com duas faces circulares, desaceleração e halo em camada separada. Três faixas reutilizáveis aparecem antes de Habilidades, Projetos e Contato, com alternativa estática e pausa/redução de movimento. Nesta etapa anterior, o relógio ficava no rodapé; a atualização de 25/10 o moveu para o Hero, mantendo `Intl.DateTimeFormat`, `America/Fortaleza`, hora real e atualização por segundo.
 
 ### Verificações desta atualização
 
@@ -227,3 +227,91 @@ O proprietário publicou um novo deployment, agora ligado ao commit `025a4a9b509
 Teste automatizado no Microsoft Edge contra o domínio publicado, sem interceptar a API: o contador começou mascarado; ao clicar, fez uma requisição que respondeu 200 e apresentou o valor formatado; o segundo clique ocultou o valor; após recarregar, voltou mascarado. Não houve `pageerror`. No mesmo smoke test público, foram confirmados nove seções, cinco projetos na ordem definida, três faixas, experiência de acessibilidade, Python, Node.js, relógio formatado, Instagram e remoção pública da Clínica.
 
 Conclusão atual: contador validado ponta a ponta em desenvolvimento, preview local e produção no deployment acima. O HTML público retornou 200 e inclui title, `og:title`, URL absoluta de `og:image` no domínio real, `twitter:card=summary_large_image` e canonical correto. A imagem Open Graph está acessível em 200 com `image/png`, 1200 × 630 e bytes compatíveis com o build. A abertura do Facebook Sharing Debugger foi limitada por HTTP 429 e o LinkedIn Post Inspector não retornou conteúdo de inspeção; não houve compartilhamento efetivo em WhatsApp/Discord/Telegram. Portanto, o HTML e o asset estão verificados, mas a aparência do cartão nessas plataformas permanece sem confirmação. Também não houve teste físico ou com leitor de tela real.
+
+## Atualização geral — 25/10/2026
+
+### Implementação
+
+- Preservadas as nove seções, o conteúdo não solicitado, o contador server-side, Instagram, Open Graph, carrosséis, abertura, foto original, halo e transição de tema em V. Nenhuma dependência adicionada; nenhum push ou deploy executado.
+- Hero com “Olá, me chamo / ANDSON / ROCHA.” e a apresentação acadêmica solicitada. Relógio real `America/Fortaleza` no topo; localização no rodapé. Os quatro parágrafos de Sobre foram substituídos pelo texto fornecido, sem inventar formação ou experiências.
+- `RadarAccordion` apresenta os quatro resumos fornecidos em `src/data/radar.ts`, com +/− funcionais, teclado, `aria-expanded`, `aria-controls` e painéis ocultos fora da árvore acessível. “Mostrar tudo/Mostrar menos” expande as quatro áreas existentes no Hero (`professionalRoles`); Habilidades permanece integralmente visível.
+- Seis SVGs reais em `public/images/feathers/`, em três planos: bordas (240–380 px), intermediário (58–128 px) e fundo (22–52 px). Mantidas densidades 30/18/10. O ticker GSAP combina direções, fases e velocidades estáveis, rotação, escala discreta, opacidade, repulsão amortecida e parallax de scroll 0,12/0,06/0,02. Os limites de retorno ficam fora da área visível. Nada captura cliques; pausa, guia oculta e movimento reduzido interrompem animações. O novo SVG é claro originalmente, com inversão no tema claro, preservando blur nos dois temas.
+- Removidos cruzes decorativas e texto permanente de instrução do retrato. Separadores duplicados antes das faixas foram removidos; linhas conectadas a títulos, timeline e controles foram preservadas.
+- WhatsApp flutuante monocromático reutiliza exatamente número e mensagem já configurados, via `whatsappContact`, `encodeURIComponent` e `ExternalLink`. Há espaço lateral nos controles mobile; nenhuma mensagem foi enviada.
+- Capa fornecida `capa_retangular_mitos_e_raizes.png`, 1070 × 622, usada sem corte no cartão e no dialog. Não houve substituição de outras imagens. Os cinco projetos abrem painéis com capa, descrição, destaques, tecnologias e links existentes. Campos sem dados reais não foram inventados.
+- Dialog nativo em duas colunas no desktop e uma no mobile: fundo e entrada/saída suaves, fechamento por botão/Escape, foco inicial e retorno, contenção de foco por Tab/Shift+Tab, bloqueio da rolagem da página e rolagem interna. A área de informações recebe foco e aceita End/PageDown mesmo nos projetos sem links. Cliques nos detalhes não fecham o painel.
+
+### Evidências e comandos
+
+A validação automatizada usa Microsoft Edge. Capturas e métricas locais estão em `.verification/`, ignorada pelo Git. Foram inspecionados Hero, detalhes, Sobre, Eventos e rodapé; a matriz de Hero/dialog inclui 1920 × 1080, 1536 × 864, 1366 × 768, 768 × 1024, 390 × 844 e 360 × 800 nos dois temas. Os 12 casos não apresentaram overflow na expansão nem nos painéis e não registraram `pageerror`.
+
+- `npm run lint`: aprovado, sem avisos.
+- `npm run build`: aprovado; inclui TypeScript estrito e build Vite. Os seis SVGs e a capa estão em `dist/`.
+- `npm test`: **70 testes aprovados** em 4,2 minutos. Inclui relógio real de Fortaleza, nove seções, textos, radar, expansão, foto, penas, cursor, scroll, toque, pausa, tema e corte em V, WhatsApp, cinco projetos, dialog e rolagem/foco por teclado sem links, acessibilidade axe, contador e API.
+- `npm run format:check`: aprovado.
+- `npm run test:production`: aprovado com `vite preview` em 127.0.0.1:4173. Verificou as nove seções, cinco capas/painéis, seis SVGs e nova PNG com HTTP 200 e Content-Type correto, foto, tema, CSP, Open Graph e ausência de erros de console/requisições externas no fluxo testado.
+- `git diff --check`: aprovado. `.env.local` está ignorado; inspeção privada detectou `ANALYTICS_READ_TOKEN` configurado e confirmou ausência do valor em `dist/`, sem imprimir o segredo.
+- Navegação repetida Início → Sobre → Projetos → Contato → Sobre → Início com movimento ativo: as penas continuaram se movendo nas cinco passagens; a troca subsequente ao tema claro terminou sem overflow ou `pageerror`.
+- Um ensaio antigo encontrou largura excessiva nos primeiros instantes após `setViewportSize(320, 900)`. A investigação mediu `scrollWidth` de 497 px por cerca de 200 ms enquanto o navegador aplicava o breakpoint; depois estabilizou em 320 px. O teste agora aguarda essa condição estável. Na suíte final e nas 12 capturas não houve overflow persistente.
+
+### Limites e pendências
+
+Os seis SVGs e a nova capa foram encontrados sem ambiguidade. Não foram fornecidas imagens adicionais nem dados novos sobre resultados, responsabilidades, desafios ou demonstrações dos projetos; o painel exibe somente o conteúdo existente. Currículo, certificados e eventos vazios continuam aguardando material real. Não houve teste em aparelhos físicos, Safari/Firefox, leitor de tela real ou benchmark em hardware de baixo desempenho. Esta atualização foi validada localmente; publicação e nova inspeção do deployment dependem de autorização. Os registros de produção anteriores acima permanecem históricos.
+
+Melhorias opcionais: testar em aparelhos físicos e leitores de tela, fornecer capturas/contexto adicionais dos projetos e considerar compressão das imagens raster após comparar a qualidade. Nenhuma dessas ampliações foi executada automaticamente.
+
+## Desempenho de rolagem — 25/10/2026
+
+### Diagnóstico e mudanças
+
+O perfil local identificou custo de rasterização das penas SVG durante rotação/escala. Um ensaio diagnóstico com tracing, mantendo os mesmos recursos e promovendo somente as imagens para composição, reduziu o trabalho de rasterização observado. A implementação usa `will-change: transform` nas imagens e reúne rotação/escala em uma escrita por quadro. O ticker lê uma posição de scroll cacheada por listener passivo; não mede layout dentro do loop.
+
+A digitação e as faixas executavam trabalho mesmo longe da área visível. Agora usam `IntersectionObserver` para pausar fora da tela e retomar com antecedência de 100/150 px. A digitação conserva índice, texto e espera restante, inclusive durante hold/gap. As faixas conservam a posição da animação. Mantidos limpeza de timers/listeners/observers, guia oculta, pausa global e movimento reduzido.
+
+Não foram modificados os seis SVGs, suas quantidades (30/18/10), tamanhos, desfoques, opacidades, velocidades, repulsão ou fatores de parallax em `motion.ts`. Header, relógio, revelação das seções e halo foram revisados: não introduzem renderização React por evento de scroll. A transição em V, foto, projetos, WhatsApp, contador e demais recursos foram preservados. Nenhuma dependência adicionada; sem push/deploy.
+
+### Medições reproduzíveis
+
+`node scripts/profile-scroll.mjs before` e `node scripts/profile-scroll.mjs after-final`, contra builds de produção em `127.0.0.1:4173`, sem testes/builds concorrentes. Microsoft Edge headless, tema escuro, duas amostras por condição, rolagem nativa de mouse de 4.800 px a 800 px/s. A coleta rAF apenas registra timestamps, sem consultar layout ou dirigir a rolagem.
+
+Intervalo p95 entre callbacks de animação (menor é melhor; faixas indicam os dois ensaios):
+
+| Viewport e CPU     | Antes          | Depois       |
+| ------------------ | -------------- | ------------ |
+| 1440 × 900, normal | 66,7 ms        | 16,9 ms      |
+| 1440 × 900, CPU 4× | 349,9–400,0 ms | 33,4–50,0 ms |
+| 390 × 844, normal  | 33,5 ms        | 16,9 ms      |
+| 390 × 844, CPU 4×  | 33,6–66,8 ms   | 16,8 ms      |
+
+Nas quatro amostras finais de CPU normal não houve intervalos acima de 34 ms. Na condição desktop/CPU 4×, os ensaios anteriores registraram 13 e 16 tarefas longas; os finais registraram 3 e 0. [Amostras brutas](scroll-performance.json) incluem todos os resultados e métricas, sem descartar ensaios mais lentos. A primeira repetição intermediária também melhorou, mas a tabela usa o build final com a correção da espera restante da digitação.
+
+Esses dados demonstram melhora de fluidez nesse ambiente, não menor consumo total de CPU: o navegador agora processa muito mais quadros por segundo e o `TaskDuration` agregado aumentou. rAF é um indicador de cadência, não uma medição direta dos quadros apresentados pelo monitor. CPU 4× e viewport estreito não equivalem a celular físico, GPU lenta, bateria ou touch. Desempenho em aparelhos reais e Safari/Firefox permanece sem medição.
+
+### Validação funcional
+
+Os dois testes iniciais de economia fora da tela reproduziram as falhas antes da correção: seis mutações de digitação em 600 ms e faixa distante com animação ativa. Após a alteração passaram, junto dos 13 testes da atualização geral. Foi acrescentado um terceiro teste para preservar a pausa entre escrever e apagar.
+
+- `npm run build`: aprovado, incluindo TypeScript estrito e build Vite.
+- `npm run lint`: aprovado sem avisos.
+- `npm test`: **73 testes aprovados em 3,6 minutos**, incluindo os três novos casos, repulsão/parallax, pausa, touch, temas/corte em V, foto, teclado, navegação, acessibilidade, contador e demais funcionalidades.
+- `npm run format:check`: aprovado em todos os arquivos verificados.
+- `npm run test:production`: aprovado no preview do build final; nove seções, cinco projetos, CSP verificada, foto carregada, zero erros de console.
+- `git diff --check`: aprovado; somente avisos de normalização LF/CRLF do ambiente Windows.
+- Inspeção visual do build em **1440 × 900 e 390 × 900**, claro/escuro, com movimento ativo: identidade preservada, 30/10 penas, inversão de cor correta, movimento mantido após scroll, sem overflow ou erros de página. Capturas e relatório local em `.verification/scroll-*.png` e `.verification/scroll-visual-report.json`. A suíte também validou ausência de overflow nas seis resoluções da atualização geral.
+
+Arquivos desta otimização: `FeatherField.tsx`, `Typewriter.tsx`, `SectionMarquee.tsx`, `global.css`, `marquee.css`, `scripts/profile-scroll.mjs`, `tests/scroll-efficiency.spec.ts`, README, este relatório, `docs/scroll-performance.json` e o plano `docs/superpowers/plans/2026-10-25-scroll-performance.md`. As alterações anteriores do portfólio permanecem no worktree e não fazem parte da medição desta correção.
+
+## Refinamento editorial da aba Projetos — 25/10/2026
+
+O carrossel mantém seus controles, navegação por teclado e gesto. A legenda das capas recebeu uma pena SVG pequena, decorativa e monocromática, com contraste do tema e sem receber eventos de ponteiro ou ser anunciada pelo leitor de tela. Links públicos de Mitos, Ame-Pet, Restaurante Dividão e Portfólio aparecem nos cartões e nos detalhes; SAPO permanece sem repositório cadastrado. O repositório do projeto de Acessibilidade é privado, conforme informado pelo proprietário, e não aparece como URL ou CTA.
+
+O array tipado de projetos passou a fornecer detalhes estruturados em uma única fonte para cartão e painel. O painel apresenta funcionalidades e tecnologias fornecidas para Mitos, Ame-Pet e Restaurante; a equipe e matrículas de Ame-Pet ficam dentro do painel. Portfólio e Acessibilidade também receberam descrições detalhadas baseadas no material fornecido. A ilustração monocromática de Acessibilidade é conceitual e não representa uma captura do projeto; tecnologias, autoria e resultados ainda não informados permanecem ausentes.
+
+- `npm run lint`: aprovado sem avisos.
+- `npm run build`: aprovado, incluindo TypeScript estrito e Vite; a ilustração SVG do sexto projeto foi copiada para `dist/`.
+- `npm test`: **75 testes aprovados** no Microsoft Edge. Cobrem navegação pelos seis projetos, CTAs públicos, ausência de link ao repositório privado, detalhes, foco, Escape, teclado, tema, assets e rolagem mobile.
+- `npm run format:check`: aprovado.
+- `npm run test:production`: aprovado contra o preview em `127.0.0.1:4173`; verificou nove seções, seis projetos distintos, imagem principal e SVG de Acessibilidade com HTTP 200 e MIME correto, CSP e zero erros de console ou pedidos externos.
+- Inspeção visual do preview em **1440 × 900** e **390 × 844**, claro e escuro. Conferi o carrossel e painéis de Ame-Pet e Acessibilidade, textos, legenda com pena e ausência de overflow horizontal. Capturas em `.verification/projects-*.png` e `.verification/*details.png`.
+
+O preview já estava usando a porta 4173; a verificação confirmou que servia o build atual com os seis títulos e a ilustração nova. Não fiz deploy nem push.

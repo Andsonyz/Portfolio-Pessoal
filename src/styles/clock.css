@@ -16,6 +16,25 @@
   line-height: 1.2;
   letter-spacing: 1px;
 }
+.hero-clock {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  width: auto;
+  flex-shrink: 0;
+  border: 0;
+  padding: 0;
+}
+.hero-clock .clock-label {
+  font-size: 8px;
+}
+.hero-clock time {
+  font-size: 17px;
+  letter-spacing: 0.6px;
+}
+.hero-clock .clock-zone {
+  display: none;
+}
 .clock-zone {
   font-size: 9px;
   color: var(--muted);
@@ -28,6 +47,21 @@
     align-items: center;
     border-top: 1px solid var(--border);
     padding-top: 20px;
+  }
+  .hero-clock {
+    order: initial;
+    width: auto;
+    display: flex;
+    grid-template-columns: none;
+    border-top: 0;
+    padding-top: 0;
+    gap: 8px;
+  }
+  .hero-clock .clock-label {
+    display: none;
+  }
+  .hero-clock time {
+    font-size: 13px;
   }
   .local-clock time {
     grid-column: 2;

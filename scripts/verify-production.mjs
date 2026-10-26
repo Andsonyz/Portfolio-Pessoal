@@ -20,7 +20,7 @@ try {
     if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`)
   })
   await page.goto('http://127.0.0.1:4173/')
-  await page.getByRole('heading', { name: 'Andson Rocha.', exact: true }).waitFor()
+  await page.getByRole('heading', { name: /^ANDSON\s*ROCHA\.$/ }).waitFor()
   const photo = page.getByRole('img', { name: 'Andson Rocha', exact: true })
   assert.equal(await photo.getAttribute('src'), '/images/profile/FotoParaPerfil.png')
   assert.ok(await photo.evaluate((image) => image.complete && image.naturalWidth > 0))
@@ -69,12 +69,40 @@ try {
   )
   await page.getByRole('link', { name: 'Conheça meus projetos' }).click()
   const titles = []
-  for (let i = 0; i < 5; i++) {
+  const featherSources = await page
+    .locator('.floating-feather')
+    .evaluateAll((images) => [...new Set(images.map((image) => image.getAttribute('src')))])
+  assert.equal(featherSources.length, 6)
+  for (const src of featherSources) {
+    const response = await page.request.get(`http://127.0.0.1:4173${src}`)
+    assert.equal(response.status(), 200)
+    assert.ok(response.headers()['content-type'].includes('image/svg+xml'))
+  }
+  const coverResponse = await page.request.get(
+    'http://127.0.0.1:4173/images/projects/capa_retangular_mitos_e_raizes.png',
+  )
+  assert.equal(coverResponse.status(), 200)
+  assert.ok(coverResponse.headers()['content-type'].includes('image/png'))
+  const accessibilityArtResponse = await page.request.get(
+    'http://127.0.0.1:4173/images/projects/acessibilidade.svg',
+  )
+  assert.equal(accessibilityArtResponse.status(), 200)
+  assert.ok(accessibilityArtResponse.headers()['content-type'].includes('image/svg+xml'))
+  const projectCount = await page.locator('.project-indicators button').count()
+  assert.equal(projectCount, 6)
+  for (let i = 0; i < projectCount; i++) {
     titles.push(await page.locator('.project-information h3').textContent())
-    await page.locator('.project-art img').evaluate((image) => image.decode())
+    await page.locator('.project-art > img').evaluate((image) => image.decode())
+    await page.locator('.project-detail-trigger').click()
+    assert.equal(await page.getByRole('dialog').isVisible(), true)
+    await page
+      .getByRole('dialog')
+      .locator('img')
+      .evaluate((image) => image.decode())
+    await page.keyboard.press('Escape')
     await page.getByRole('button', { name: 'Próximo projeto' }).click()
   }
-  assert.equal(new Set(titles).size, 5)
+  assert.equal(new Set(titles).size, projectCount)
   await page.locator('#trajetoria summary').click()
   assert.equal(await page.locator('#trajetoria details').getAttribute('open'), '')
   assert.equal(await page.getByRole('link', { name: /baixar currículo/i }).count(), 0)
@@ -85,6 +113,7 @@ try {
       {
         result: 'passed',
         sections: 9,
+        projectCount,
         projectTitles: titles,
         theme: 'light',
         externalRequests: 0,

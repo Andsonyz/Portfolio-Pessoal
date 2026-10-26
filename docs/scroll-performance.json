@@ -1,0 +1,351 @@
+﻿{
+  "date": "2026-10-25",
+  "environment": "Microsoft Edge headless via Playwright; production preview on 127.0.0.1:4173; dark theme",
+  "before": {
+    "value": [
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 1,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 119,
+        "p95Ms": 66.70000000000027,
+        "framesOver34Ms": 118,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 0.493969,
+          "ScriptDuration": 0.089818,
+          "RecalcStyleDuration": 0.120447,
+          "LayoutDuration": 0.029316,
+          "LayoutCount": 82
+        }
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 1,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 122,
+        "p95Ms": 66.69999999999982,
+        "framesOver34Ms": 115,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 0.451839,
+          "ScriptDuration": 0.079198,
+          "RecalcStyleDuration": 0.108529,
+          "LayoutDuration": 0.022841,
+          "LayoutCount": 60
+        }
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 4,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 65,
+        "p95Ms": 349.90000000000055,
+        "framesOver34Ms": 60,
+        "longTasks": 13,
+        "longTaskMs": 1939,
+        "metrics": {
+          "TaskDuration": 3.1353850000000003,
+          "ScriptDuration": 0.538269,
+          "RecalcStyleDuration": 0.7891,
+          "LayoutDuration": 0.143113,
+          "LayoutCount": 45
+        }
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 4,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 53,
+        "p95Ms": 400,
+        "framesOver34Ms": 50,
+        "longTasks": 16,
+        "longTaskMs": 2244,
+        "metrics": {
+          "TaskDuration": 3.4695359999999997,
+          "ScriptDuration": 0.653952,
+          "RecalcStyleDuration": 0.889761,
+          "LayoutDuration": 0.157455,
+          "LayoutCount": 54
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 1,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 237,
+        "p95Ms": 33.5,
+        "framesOver34Ms": 1,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 0.785133,
+          "ScriptDuration": 0.134856,
+          "RecalcStyleDuration": 0.196086,
+          "LayoutDuration": 0.035131,
+          "LayoutCount": 83
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 1,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 213,
+        "p95Ms": 33.5,
+        "framesOver34Ms": 4,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 0.764372,
+          "ScriptDuration": 0.1354,
+          "RecalcStyleDuration": 0.198942,
+          "LayoutDuration": 0.039621,
+          "LayoutCount": 83
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 4,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 141,
+        "p95Ms": 66.80000000000018,
+        "framesOver34Ms": 61,
+        "longTasks": 2,
+        "longTaskMs": 117,
+        "metrics": {
+          "TaskDuration": 2.900393,
+          "ScriptDuration": 0.456971,
+          "RecalcStyleDuration": 0.62196,
+          "LayoutDuration": 0.10226,
+          "LayoutCount": 58
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 4,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 184,
+        "p95Ms": 33.599999999999454,
+        "framesOver34Ms": 7,
+        "longTasks": 1,
+        "longTaskMs": 51,
+        "metrics": {
+          "TaskDuration": 2.363042,
+          "ScriptDuration": 0.354137,
+          "RecalcStyleDuration": 0.443694,
+          "LayoutDuration": 0.071121,
+          "LayoutCount": 62
+        }
+      }
+    ],
+    "Count": 8
+  },
+  "after": {
+    "value": [
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 1,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 367,
+        "p95Ms": 16.90000000000009,
+        "framesOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 1.707324,
+          "ScriptDuration": 0.254275,
+          "RecalcStyleDuration": 0.573576,
+          "LayoutDuration": 0.011761,
+          "LayoutCount": 27
+        }
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 1,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 368,
+        "p95Ms": 16.899999999999636,
+        "framesOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 1.821827,
+          "ScriptDuration": 0.26601,
+          "RecalcStyleDuration": 0.614767,
+          "LayoutDuration": 0.014799,
+          "LayoutCount": 39
+        }
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 4,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 290,
+        "p95Ms": 33.400000000000546,
+        "framesOver34Ms": 7,
+        "longTasks": 3,
+        "longTaskMs": 167,
+        "metrics": {
+          "TaskDuration": 4.563635,
+          "ScriptDuration": 0.615813,
+          "RecalcStyleDuration": 1.298358,
+          "LayoutDuration": 0.018469,
+          "LayoutCount": 23
+        }
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "throttle": 4,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 254,
+        "p95Ms": 50,
+        "framesOver34Ms": 15,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 4.747553,
+          "ScriptDuration": 0.658058,
+          "RecalcStyleDuration": 1.384998,
+          "LayoutDuration": 0.037931,
+          "LayoutCount": 24
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 1,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 367,
+        "p95Ms": 16.899999999999636,
+        "framesOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 1.763631,
+          "ScriptDuration": 0.257383,
+          "RecalcStyleDuration": 0.518002,
+          "LayoutDuration": 0.01893,
+          "LayoutCount": 36
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 1,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 367,
+        "p95Ms": 16.899999999999636,
+        "framesOver34Ms": 0,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 1.829176,
+          "ScriptDuration": 0.24426,
+          "RecalcStyleDuration": 0.535219,
+          "LayoutDuration": 0.015645,
+          "LayoutCount": 36
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 4,
+        "trial": 1,
+        "scrollY": 4800,
+        "frames": 356,
+        "p95Ms": 16.800000000000182,
+        "framesOver34Ms": 1,
+        "longTasks": 1,
+        "longTaskMs": 75,
+        "metrics": {
+          "TaskDuration": 3.4470539999999996,
+          "ScriptDuration": 0.547654,
+          "RecalcStyleDuration": 0.680844,
+          "LayoutDuration": 0.034066,
+          "LayoutCount": 36
+        }
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "throttle": 4,
+        "trial": 2,
+        "scrollY": 4800,
+        "frames": 351,
+        "p95Ms": 16.800000000000182,
+        "framesOver34Ms": 1,
+        "longTasks": 0,
+        "longTaskMs": 0,
+        "metrics": {
+          "TaskDuration": 3.483788,
+          "ScriptDuration": 0.57144,
+          "RecalcStyleDuration": 0.702857,
+          "LayoutDuration": 0.028324,
+          "LayoutCount": 36
+        }
+      }
+    ],
+    "Count": 8
+  },
+  "method": "Two trials per viewport and CPU throttle; native mouse-wheel gesture, 4800px at 800px/s. RAF interval sampling and Performance metrics. No competing tests/builds. CPU throttle is an emulation, not a physical mobile device."
+}

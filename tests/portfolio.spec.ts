@@ -4,7 +4,7 @@ import { safeHref } from '../src/lib/links'
 
 test('apresenta conteúdo confirmado e omite arquivos ainda não fornecidos', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByRole('heading', { name: 'Andson Rocha.', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /^ANDSON\s*ROCHA\.$/ })).toBeVisible()
   await expect(page.locator('main > section')).toHaveCount(9)
   await expect(page.getByRole('link', { name: /baixar currículo/i })).toHaveCount(0)
   await expect(page.getByText('Certificados a caminho.')).toBeVisible()
@@ -12,7 +12,9 @@ test('apresenta conteúdo confirmado e omite arquivos ainda não fornecidos', as
   await expect(page.getByRole('img', { name: 'Andson Rocha', exact: true })).toBeVisible()
 })
 
-test('carrossel responde a botões e teclado sem criar repositórios fictícios', async ({ page }) => {
+test('carrossel responde a botões e teclado e mostra somente repositórios disponíveis', async ({
+  page,
+}) => {
   await page.goto('/#projetos')
   const carousel = page.getByRole('region', { name: 'Projetos selecionados' })
   await expect(carousel.getByRole('heading', { name: 'Entre Mitos e Raízes' })).toBeVisible()
@@ -22,9 +24,16 @@ test('carrossel responde a botões e teclado sem criar repositórios fictícios'
   ).toBeVisible()
   await carousel.focus()
   await page.keyboard.press('End')
-  await expect(carousel.getByRole('heading', { name: 'Portfólio Pessoal' })).toBeVisible()
+  await expect(
+    carousel.getByRole('heading', { name: 'Acessibilidade Digital para deficientes visuais' }),
+  ).toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(carousel.getByRole('heading', { name: 'Entre Mitos e Raízes' })).toBeVisible()
+  await expect(carousel.getByRole('link', { name: /repositório/i })).toHaveAttribute(
+    'href',
+    'https://github.com/Andsonyz/Projeto-Entre-Mitos-E-Ra-zes',
+  )
+  await page.locator('.project-indicators button').nth(3).click()
   await expect(carousel.getByRole('link', { name: /repositório/i })).toHaveCount(0)
 })
 
@@ -183,7 +192,7 @@ test('entrada anima o conteúdo em cada carregamento', async ({ page }) => {
 test('penas se movem, pausam, invertem de cor e respeitam redução', async ({ page }) => {
   await page.goto('/')
   const feather = page.locator('.floating-feather').first()
-  await expect(feather).toHaveCSS('filter', 'invert(1)')
+  await expect(feather).toHaveCSS('filter', /invert\(0\)/)
   const before = await feather.evaluate((element) => getComputedStyle(element).transform)
   await expect
     .poll(() => feather.evaluate((element) => getComputedStyle(element).transform))
@@ -193,7 +202,7 @@ test('penas se movem, pausam, invertem de cor e respeitam redução', async ({ p
   await page.waitForTimeout(300)
   expect(await feather.evaluate((element) => getComputedStyle(element).transform)).toBe(paused)
   await page.getByRole('button', { name: 'Ativar tema claro' }).click()
-  await expect(feather).toHaveCSS('filter', 'none')
+  await expect(feather).toHaveCSS('filter', /invert\(1\).*blur\(/)
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await expect(page.getByRole('button', { name: 'Movimento reduzido pelo sistema' })).toBeDisabled()
   await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced')
@@ -303,11 +312,18 @@ test('desktop e mobile sem overflow, erros de console ou violações axe', async
 test('carrossel preserva zoom e não rouba teclas de controles internos', async ({ page }) => {
   await page.goto('/#projetos')
   await expect(page.locator('.project-slide')).toHaveCSS('touch-action', 'pan-y pinch-zoom')
-  const summary = page.locator('.project-details summary')
-  await summary.focus()
+  const trigger = page.getByRole('button', { name: 'Um olhar mais de perto' })
+  await trigger.focus()
   await page.keyboard.press('ArrowRight')
-  await expect(summary).toBeFocused()
+  await expect(trigger).toBeFocused()
   await expect(page.locator('.project-information h3')).toHaveText('Entre Mitos e Raízes')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.project-details')).toHaveAttribute('open', '')
+  const dialog = page.getByRole('dialog', { name: 'Entre Mitos e Raízes' })
+  await expect(dialog).toBeVisible()
+  await expect(
+    dialog.getByRole('button', { name: 'Fechar detalhes de Entre Mitos e Raízes' }),
+  ).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(dialog).not.toBeVisible()
+  await expect(trigger).toBeFocused()
 })

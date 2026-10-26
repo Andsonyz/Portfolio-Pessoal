@@ -39,6 +39,7 @@
   animation-direction: reverse;
 }
 .section-marquee[data-hover-pause='true']:hover .marquee-track,
+.section-marquee[data-in-view='false'] .marquee-track,
 .section-marquee[data-page-hidden='true'] .marquee-track {
   animation-play-state: paused;
 }

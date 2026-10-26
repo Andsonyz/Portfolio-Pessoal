@@ -20,7 +20,7 @@ npm run preview
 
 A prévia de produção usa **http://127.0.0.1:4173**. O resultado está em `dist/`. A integração com Vercel Web Analytics está preparada para o deployment; esta alteração não executa publicação ou push.
 
-Com a prévia de produção em execução, `npm run test:production` verifica o bundle gerado, os cinco projetos, a política de segurança e a ausência de requisições a terceiros.
+Com a prévia de produção em execução, `npm run test:production` verifica o bundle gerado, os seis projetos, suas imagens, a política de segurança e a ausência de requisições a terceiros.
 
 ## Comandos de qualidade
 
@@ -56,7 +56,7 @@ src/
     animations/        penas, abertura Welcome e texto digitado
     layout/            rodapé
     navigation/        cabeçalho e menu móvel
-    projects/          carrossel acessível
+    projects/          carrossel e painel modal acessível
     timeline/          linha do tempo expansível
     ui/                retrato interativo, monograma, títulos e links seguros
   data/                textos, projetos, habilidades, contatos e registros
@@ -67,11 +67,11 @@ src/
   types/               contratos de conteúdo
 public/
   images/profile/      foto opcional
-  images/projects/     cinco ilustrações conceituais em SVG
-  images/feathers/     duas penas vetoriais detalhadas
+  images/projects/     capas dos projetos (SVG e PNG fornecido)
+  images/feathers/     seis SVGs de penas fornecidos pelo proprietário
   documents/           currículo e documentos públicos opcionais
   icons/               favicon AR
-scripts/               geração determinística das penas locais
+scripts/               verificadores de produção e utilitários
 tests/                 testes de comportamento e acessibilidade
 docs/                  design, plano e relatório de validação
 ```
@@ -80,16 +80,17 @@ docs/                  design, plano e relatório de validação
 
 Edite os arquivos de `src/data/`. Para conteúdo e aparência não é necessária outra conta; o contador usa a configuração server-side descrita abaixo.
 
-| Informação                                                  | Arquivo             |
-| ----------------------------------------------------------- | ------------------- |
-| Nome, título, texto sobre, formação, interesses e navegação | `profile.ts`        |
-| Categorias e ícones de habilidades                          | `skills.ts`         |
-| Experiências acadêmicas e temas de inclusão                 | `experiences.ts`    |
-| Cinco projetos, imagens, destaques e links opcionais        | `projects.ts`       |
-| Certificados                                                | `certifications.ts` |
-| Marcos da trajetória                                        | `timeline.ts`       |
-| Eventos                                                     | `events.ts`         |
-| E-mail, WhatsApp, GitHub, LinkedIn, Discord e Instagram     | `contacts.ts`       |
+| Informação                                              | Arquivo             |
+| ------------------------------------------------------- | ------------------- |
+| Nome, título, texto sobre, formação e navegação         | `profile.ts`        |
+| Quatro interesses expansíveis de No meu radar           | `radar.ts`          |
+| Categorias e ícones de habilidades                      | `skills.ts`         |
+| Experiências acadêmicas e temas de inclusão             | `experiences.ts`    |
+| Seis projetos, imagens, detalhes e links opcionais      | `projects.ts`       |
+| Certificados                                            | `certifications.ts` |
+| Marcos da trajetória                                    | `timeline.ts`       |
+| Eventos                                                 | `events.ts`         |
+| E-mail, WhatsApp, GitHub, LinkedIn, Discord e Instagram | `contacts.ts`       |
 
 O período acadêmico é um dado informado, não calculado automaticamente. Atualize-o em `profile.ts` ao revisar sua apresentação. Não acrescente cargos, datas, certificados ou instituições sem confirmação. A experiência de acessibilidade em andamento está em `experiences.ts`, sem data inventada; a trajetória só recebe marcos com data confirmada.
 
@@ -105,9 +106,11 @@ Adicione `public/documents/curriculo-andson-rocha.pdf` e **reinicie o servidor**
 
 ### Projetos
 
-Cada registro segue `Project` em `src/types/content.ts`: `id`, `title`, `category`, `description`, `technologies`, `highlights`, `image` e `imageAlt`. `repository` e `liveUrl` são opcionais e devem ser URLs HTTPS reais. Coloque imagens próprias em `public/images/projects/` e use caminhos como `/images/projects/nome.webp`.
+Cada registro segue `Project` em `src/types/content.ts`: `id`, `title`, `category`, `description`, `technologies`, `highlights`, `image` e `imageAlt`. `detailsSections`, `repository` e `liveUrl` são opcionais; os links devem ser destinos HTTPS públicos reais. Coloque imagens próprias em `public/images/projects/` e use caminhos como `/images/projects/nome.webp`.
 
-Os SVGs atuais são **ilustrações conceituais**, não screenshots de sistemas. Ame-Pet e Restaurante Dividão são trabalhos acadêmicos colaborativos de terminal, confirmados nos respectivos repositórios; o portfólio não os apresenta como aplicações web. Para acrescentar um projeto, insira um registro em `src/data/projects.ts`, coloque um arquivo real em `public/images/projects/`, use um link de repositório confirmado e atualize texto alternativo. O carrossel deriva indicadores e contagem do array. Ao substituir ilustrações por capturas reais, atualize o texto alternativo e o `figcaption` em `ProjectCarousel.tsx`.
+Os SVGs atuais são **ilustrações conceituais**, não screenshots de sistemas. Entre Mitos e Raízes utiliza a nova capa fornecida `capa_retangular_mitos_e_raizes.png` (1070 × 622), sem corte, tanto no cartão quanto nos detalhes. A ilustração de Acessibilidade Digital também é conceitual; seu repositório permanece privado e não recebe link público. Ame-Pet e Restaurante Dividão são trabalhos acadêmicos colaborativos de terminal, confirmados nos respectivos repositórios; o portfólio não os apresenta como aplicações web. Os repositórios públicos informados aparecem como links nos cartões e detalhes. Para acrescentar um projeto, edite `src/data/projects.ts`, adicione o arquivo real em `public/images/projects/` e atualize `imageAlt`, `imageWidth`, `imageHeight` e `imageCaption` quando aplicável. Cartão e painel usam a mesma entidade tipada `Project`; somente campos disponíveis são apresentados.
+
+“Um olhar mais de perto” abre um dialog nativo com capa e informações lado a lado no desktop, e uma coluna no mobile. O conteúdo tem rolagem interna; Escape e o botão de fechar devolvem o foco à origem. A página principal fica com rolagem bloqueada enquanto o painel está aberto. Entrada e saída respeitam pausa e movimento reduzido.
 
 ### Certificados
 
@@ -129,16 +132,26 @@ Os tokens claro/escuro ficam no início de `src/styles/global.css`. Use apenas p
 - Corte em V de **1,4 segundo**, aplicado ao snapshot completo com View Transitions. A geometria do próprio V forma o corte; não há uma linha DOM independente. Navegadores sem a API recebem a troca imediata. Movimento reduzido e pausa também usam troca imediata.
 - Durante o V, o navegador suspende cliques nos elementos capturados até terminar a transição. Essa limitação nativa dura 1,4 segundo; os controles voltam a responder ao final. A abertura Welcome tem comportamento separado e pode ser pulada imediatamente.
 - Welcome com três ícones Lucide, blur e chuva de penas, coordenado por uma timeline GSAP de aproximadamente **3,2 segundos**. A página permanece montada; teclado, clique, toque ou rolagem encerram imediatamente a abertura. Ela se repete no reload, sem reiniciar ao trocar o tema.
-- **30 penas no desktop (≥1200 px), 18 no tablet e 10 no mobile (<768 px)**, com larguras de 12–34 px. São brancas no escuro e pretas no claro. Flutuação e repulsão usam transforms sem renderizações React por frame. Mouse fino tem raio de influência de 115 px e deslocamento máximo de 28 px; touch mantém só o movimento natural.
+- **30 penas no desktop (≥1200 px), 18 no tablet e 10 no mobile (<768 px)**, em três planos: primeiro plano nas bordas (240–380 px), intermediário (58–128 px) e fundo (22–52 px). Os seis SVGs transparentes fornecidos mantêm detalhes claros no escuro e escuros no claro. Sementes estáveis controlam tamanho, direção, fase e luminosidade; flutuação, rotação, escala, repulsão amortecida e parallax de scroll compõem transforms sem renderizações React por frame. Mouse fino tem raio de influência de 115 px e deslocamento máximo de 28 px; touch mantém movimento natural e parallax. Pausa, guia oculta e movimento reduzido interrompem o ticker.
 - As quatro áreas do Hero alternam com digitação de 80–94 ms por caractere, apagamento de 42 ms, pausa de 1.500 ms e intervalo de 300 ms. Espaço reservado evita saltos, e leitores de tela recebem a lista completa sem anúncios de caracteres. Redução/pausa mostra um título estático.
 - O botão ao lado do tema pausa o movimento. `prefers-reduced-motion` é respeitado e reage a mudanças do sistema.
 - Carrossel sem reprodução automática: setas, indicadores, swipe horizontal e teclado. Focando a região do carrossel, use ←/→, Home e End. Gestos verticais e zoom por pinça são preservados.
 - Três faixas editoriais antecedem Habilidades, Projetos e Contato. Edite palavras, direção e duração em `src/data/marquees.ts`; `SectionMarquee.tsx` oferece uma cópia estática acessível e interrompe movimento por pausa, hover, guia oculta ou preferência de movimento reduzido.
-- O relógio discreto do rodapé usa a hora atual do dispositivo com `Intl.DateTimeFormat` no fuso fixo `America/Fortaleza` e formato de 24 horas. Rótulos e fuso ficam em `src/data/clock.ts`; `LocalClock.tsx` atualiza uma vez por segundo, sincroniza ao voltar à guia e limpa o timer ao desmontar.
+- O relógio discreto do **Hero** usa a hora atual do dispositivo com `Intl.DateTimeFormat` no fuso fixo `America/Fortaleza` e formato de 24 horas. Rótulos e fuso ficam em `src/data/clock.ts`; `LocalClock.tsx` atualiza uma vez por segundo, sincroniza ao voltar à guia e limpa o timer ao desmontar. “Pau dos Ferros, RN” aparece no rodapé.
+- “Áreas que eu exploro”, no Hero, oferece Mostrar tudo/Mostrar menos com as quatro áreas já existentes em `professionalRoles`. “No meu radar”, em Sobre, apresenta os quatro resumos de `radar.ts` com botões +/−, teclado, ARIA e expansão suave. Os grupos de Habilidades continuam visíveis.
+- O WhatsApp flutuante reutiliza `whatsappContact` de `contacts.ts`: mesmo número e mensagem, codificada com `encodeURIComponent`, em nova aba. Os controles mobile reservam espaço lateral para o botão. A foto mantém halo e giro no eixo Y, com rótulo acessível, sem instrução textual permanente ou cruz decorativa.
 
 As quantidades, tamanhos, raio/força de repulsão, tempos da digitação e parâmetros da foto ficam em **`src/data/motion.ts`**. A timeline Welcome fica em `PageMotion.tsx`, e os estilos do corte em V ficam em `global.css`. A assinatura do nome usa **Space Grotesk**, em caixa alta, peso 600 e espaçamento ajustado; Manrope continua nos textos e controles. Nenhuma nova família ou dependência foi instalada nesta atualização.
 
-Para regenerar os SVGs após editar seu desenho: `node scripts/generate-feathers.mjs`.
+Os SVGs atuais são recursos fornecidos pelo proprietário; o gerador antigo `scripts/generate-feathers.mjs` não produz esse conjunto e não faz parte do fluxo de build.
+
+### Desempenho de rolagem
+
+As penas reutilizam camadas de composição (`will-change: transform`) para evitar rasterizar novamente os caminhos SVG a cada rotação. Rotação e escala são escritas juntas; o parallax consome a posição de scroll armazenada por listener passivo. Quantidade, arquivos, tamanhos, blur e parâmetros de movimento permanecem em `motion.ts`, sem redução de qualidade como estratégia de desempenho.
+
+A digitação do Hero e as faixas pausam fora da área visível, usando `IntersectionObserver`, e retomam o progresso ao reaparecer. A digitação conserva inclusive a espera restante entre caracteres/palavras. Os observers e timers são removidos na desmontagem.
+
+Para medir: execute `npm run build`, inicie `npm run preview` em um terminal e rode `node scripts/profile-scroll.mjs nome-do-ensaio` em outro. Requer Microsoft Edge. Evite executar builds/testes ao mesmo tempo: o script mede duas descidas de 4.800 px por combinação de viewport (1440 × 900 e 390 × 844) e CPU normal/4×, usando entrada de mouse nativa e amostragem rAF. Relatórios ficam em `.verification/scroll-performance-nome-do-ensaio.json`. Consulte [as amostras registradas](docs/scroll-performance.json) e [os resultados e limites](docs/validation.md). O viewport estreito não substitui teste em celular físico.
 
 ## Privacidade e segurança
 

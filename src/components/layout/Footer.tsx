@@ -1,6 +1,5 @@
 import { ArrowUp } from 'lucide-react'
 import { Monogram } from '../ui/Monogram'
-import { LocalClock } from '../ui/LocalClock'
 export function Footer() {
   return (
     <footer className="site-footer">
@@ -10,7 +9,7 @@ export function Footer() {
           Andson Rocha<span>Tecnologia, design & código.</span>
         </span>
       </a>
-      <LocalClock />
+      <p className="footer-location">Pau dos Ferros, RN</p>
       <p>
         Feito com intenção.
         <br />© {new Date().getFullYear()} Andson Rocha.

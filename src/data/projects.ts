@@ -6,16 +6,34 @@ export const projects: Project[] = [
     title: 'Entre Mitos e Raízes',
     category: 'Jogo educacional',
     description:
-      'Uma aventura de exploração pelo folclore brasileiro, onde a descoberta e a preservação ambiental fazem parte da mesma história.',
+      'Jogo educativo de plataforma 2D inspirado no folclore brasileiro. Explore a floresta, cumpra desafios ambientais e aprenda com Curupira, Saci, Caipora e Negrinho do Pastoreio.',
     technologies: ['Java', 'Swing', 'AWT', 'Graphics2D'],
-    highlights: [
-      'Narrativa educativa',
-      'Personagens folclóricos',
-      'Mecânicas interativas',
-      'Conscientização ambiental',
+    highlights: [],
+    detailsSections: [
+      {
+        title: 'Desenvolvimento',
+        items: [
+          'Desenvolvido em Java com Swing/AWT para a interface e JavaFX Media para os vídeos.',
+        ],
+      },
+      {
+        title: 'Funcionalidades',
+        items: [
+          'Quatro fases com objetivos, diálogos e desafios educativos.',
+          'Dois slots de save, continuação da campanha e seleção de fases desbloqueadas.',
+          'Prólogo em vídeo, mapa de progresso e menu de pausa.',
+          'Seleção de personagem: masculino disponível e feminino identificado como “Em breve”.',
+          'Ajustes de tamanho do texto e alto contraste.',
+        ],
+      },
     ],
-    image: '/images/projects/mitos.svg',
-    imageAlt: 'Ilustração conceitual: raízes e camadas de uma floresta, em preto e branco.',
+    image: '/images/projects/capa_retangular_mitos_e_raizes.png',
+    imageAlt:
+      'Capa do jogo Entre Mitos e Raízes, com uma floresta, um explorador e o título do projeto.',
+    imageWidth: 1070,
+    imageHeight: 622,
+    imageCaption: 'Capa do projeto',
+    repository: 'https://github.com/Andsonyz/Projeto-Entre-Mitos-E-Ra-zes',
   },
   {
     id: 'ame-pet',
@@ -24,11 +42,36 @@ export const projects: Project[] = [
     description:
       'Desenvolvido em equipe na disciplina de Programação Orientada a Objetos da UFERSA. Um sistema de terminal em Java para organizar clientes, pets, atendimentos e produtos de um petshop.',
     technologies: ['Java', 'Programação Orientada a Objetos', 'Aplicação de terminal'],
-    highlights: [
-      'Cadastros de clientes e pets, com histórico de atendimentos',
-      'Produtos, estoque, vendas e adoção de pets',
-      'Encapsulamento, herança, polimorfismo e abstração',
-      'Strategy nas formas de pagamento, com cálculos simulados',
+    highlights: [],
+    detailsSections: [
+      {
+        title: 'Funcionalidades',
+        items: [
+          'Cadastro de funcionários com cargo, salário e data de admissão.',
+          'Registro de clientes com nome, CPF, telefone e endereço.',
+          'Login de funcionários com usuário e senha.',
+          'Cadastro de pets associados a clientes, com espécie, raça, idade e peso.',
+          'Listagem de pets disponíveis para compra e adoção.',
+          'Registro de serviços básicos, como banho e tosa, e serviços clínicos, como consultas, exames e vacinação.',
+          'Registro de internações e cirurgias, além de atendimentos com data, cliente, pet e preço.',
+          'Catálogo de rações, brinquedos e acessórios, com controle de estoque, preços, descontos e taxas.',
+          'Pagamentos em dinheiro, Pix, cartão de crédito ou débito.',
+          'Formulários de compra e adoção, recibos e histórico de transações.',
+          'Relatórios de vendas e serviços, histórico de clientes e pets e busca por cliente, pet ou serviço.',
+        ],
+      },
+      {
+        title: 'Integrantes',
+        items: [
+          'Alexsandro Rocha dos Santos — 2024010299',
+          'Antonio Andson de Oliveira Rocha — 2024010349',
+          'Ikaro Ferreira Brito — 2024010233',
+          'Levi Filgueira Chagas — 2022022050',
+          'Lucas Vieres Araujo Farias — 2025022531',
+          'Paulo Gabriel Vieira de Souza Paiva — 2024010420',
+          'Sophia Hellen Pires da Silveira — 2024010321',
+        ],
+      },
     ],
     image: '/images/projects/ame-pet.svg',
     imageAlt:
@@ -48,6 +91,23 @@ export const projects: Project[] = [
       'Ponteiros, strings e vetores dinâmicos com malloc, realloc e free',
       'Modularização, structs e enums',
       'Disciplina ministrada por George Felipe Fernandes Vieira',
+    ],
+    detailsSections: [
+      {
+        title: 'Contexto acadêmico',
+        items: [
+          'Desenvolvido para a primeira unidade da disciplina Estruturas de Dados I, ministrada por George Felipe Fernandes Vieira.',
+        ],
+      },
+      {
+        title: 'Conceitos aplicados',
+        items: [
+          'Ponteiros e manipulação de strings para cópia, concatenação e comparação.',
+          'Alocação dinâmica de memória com malloc, realloc e free.',
+          'Vetores dinâmicos para armazenar itens do cardápio e pedidos.',
+          'Structs e enumerações para organizar os dados.',
+        ],
+      },
     ],
     image: '/images/projects/restaurante-dividao.svg',
     imageAlt:
@@ -80,5 +140,39 @@ export const projects: Project[] = [
     highlights: ['Design responsivo', 'Animações', 'Identidade visual', 'Acessibilidade'],
     image: '/images/projects/portfolio.svg',
     imageAlt: 'Composição tipográfica conceitual com o monograma AR e linhas editoriais.',
+    detailsSections: [
+      {
+        title: 'Sobre este site',
+        items: [
+          'Portfólio editorial monocromático, desenvolvido do zero em React e TypeScript.',
+          'Nove seções apresentam a formação na UFERSA, habilidades, experiências acadêmicas, projetos e contatos.',
+          'Conteúdo ainda não fornecido permanece ausente ou com um estado vazio explícito.',
+        ],
+      },
+    ],
+    repository: 'https://github.com/Andsonyz/Portfolio-Pessoal',
+  },
+  {
+    id: 'acessibilidade-digital',
+    title: 'Acessibilidade Digital para deficientes visuais',
+    category: 'Acessibilidade digital · Em desenvolvimento',
+    description:
+      'O projeto busca oferecer uma alternativa para limitações de algumas tecnologias assistivas, incluindo a interpretação de tabelas complexas, a leitura de caracteres especiais e a tradução de texto em braille e vice-versa.',
+    technologies: [],
+    highlights: [],
+    detailsSections: [
+      {
+        title: 'Objetivo e recursos',
+        items: [
+          'Desenvolver uma alternativa para determinadas limitações de tecnologias assistivas.',
+          'Apoiar a interpretação de tabelas complexas.',
+          'Apoiar a leitura de caracteres especiais.',
+          'Explorar tradução de texto em braille e vice-versa.',
+        ],
+      },
+    ],
+    image: '/images/projects/acessibilidade.svg',
+    imageAlt:
+      'Ilustração conceitual monocromática de uma tabela e pontos em relevo, representando o tema de acessibilidade digital. Não é uma captura do projeto.',
   },
 ]

@@ -37,9 +37,6 @@ export function Events() {
         </ol>
       ) : (
         <div className="events-empty" data-reveal>
-          <span className="event-line" aria-hidden="true">
-            <span />
-          </span>
           <div>
             <p className="eyebrow">Encontros que ampliam horizontes</p>
             <h3>Novos encontros, em breve.</h3>

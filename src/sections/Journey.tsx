@@ -14,9 +14,7 @@ export function Journey() {
         <span className="muted-heading">em construção.</span>
       </SectionHeading>
       <Timeline items={timeline} />
-      <p className="timeline-continuation">
-        <span aria-hidden="true">+</span> Os próximos capítulos estão sendo escritos.
-      </p>
+      <p className="timeline-continuation">Os próximos capítulos estão sendo escritos.</p>
     </section>
   )
 }

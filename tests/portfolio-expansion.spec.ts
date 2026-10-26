@@ -1,37 +1,50 @@
 import { expect, test } from '@playwright/test'
 
-test('cinco projetos colaborativos, acessibilidade e novas habilidades', async ({ page }) => {
+test('seis projetos, repositórios públicos, acessibilidade e novas habilidades', async ({
+  page,
+}) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   await expect(page.locator('main > section')).toHaveCount(9)
-  await expect(page.locator('.project-indicators button')).toHaveCount(5)
+  await expect(page.locator('.project-indicators button')).toHaveCount(6)
   const titles = [
     'Entre Mitos e Raízes',
     'Ame-Pet — Sistema de Gerenciamento de Petshop',
     'Sistema Restaurante Dividão',
     'SAPO — Achados e Perdidos UFERSA',
     'Portfólio Pessoal',
+    'Acessibilidade Digital para deficientes visuais',
   ]
   for (const [index, title] of titles.entries()) {
     await page.locator('.project-indicators button').nth(index).click()
     await expect(page.locator('.project-information h3')).toHaveText(title)
     await expect(page.locator('.project-information')).toHaveAttribute(
       'aria-label',
-      `${index + 1} de 5`,
+      `${index + 1} de 6`,
     )
+    const repository = page.locator('.project-information').getByRole('link', {
+      name: 'Ver repositório',
+    })
+    const expectedRepositories: Record<number, string> = {
+      0: 'https://github.com/Andsonyz/Projeto-Entre-Mitos-E-Ra-zes',
+      1: 'https://github.com/gabrdsp/Ame-Pet',
+      2: 'https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante',
+      4: 'https://github.com/Andsonyz/Portfolio-Pessoal',
+    }
+    if (index in expectedRepositories) {
+      await expect(repository).toHaveAttribute('href', expectedRepositories[index]!)
+      await expect(repository).toHaveAttribute('rel', 'noopener noreferrer')
+    } else {
+      await expect(repository).toHaveCount(0)
+    }
     if (index === 1 || index === 2) {
       await expect(page.locator('.project-information')).toContainText(/colaborativo/i)
       await expect(page.locator('.project-information')).toContainText(/terminal/i)
-      const link = page
-        .locator('.project-information')
-        .getByRole('link', { name: 'Ver repositório' })
-      await expect(link).toHaveAttribute(
-        'href',
-        index === 1
-          ? 'https://github.com/gabrdsp/Ame-Pet'
-          : 'https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante',
-      )
-      await expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+      await expect(repository).toBeVisible()
+    }
+    if (index === 5) {
+      await expect(page.locator('.project-information')).toContainText('braille')
+      await expect(page.locator('.project-information')).not.toContainText('github.com')
     }
   }
   await expect(page.locator('body')).not.toContainText('Sistema de Consultório/Clínica')
@@ -81,7 +94,9 @@ test('faixas movem, pausam no hover/global e oferecem conteúdo estático reduzi
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.setViewportSize({ width: 320, height: 900 })
   await expect(page.locator('main > section')).toHaveCount(9)
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true)
   await expect(bands.first().locator('.marquee-static')).toBeVisible()
 })
 

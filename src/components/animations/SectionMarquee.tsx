@@ -26,8 +26,18 @@ export function SectionMarquee({
       element.dataset.pageHidden = String(document.hidden)
     }
     update()
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        element.dataset.inView = String(entry?.isIntersecting ?? false)
+      },
+      { rootMargin: '150px' },
+    )
+    observer.observe(element)
     document.addEventListener('visibilitychange', update)
-    return () => document.removeEventListener('visibilitychange', update)
+    return () => {
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', update)
+    }
   }, [words.length])
   if (words.length === 0) return null
   const style = { '--marquee-duration': `${Math.max(15, duration)}s` } as CSSProperties

@@ -5,8 +5,12 @@ export interface Project {
   description: string
   technologies: string[]
   highlights: string[]
+  detailsSections?: { title: string; items: string[] }[]
   image: string
   imageAlt: string
+  imageWidth?: number
+  imageHeight?: number
+  imageCaption?: string
   repository?: string
   liveUrl?: string
 }

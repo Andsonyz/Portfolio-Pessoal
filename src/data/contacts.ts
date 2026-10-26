@@ -2,7 +2,14 @@ import { SiGithub, SiDiscord, SiWhatsapp, SiInstagram } from 'react-icons/si'
 import { FaLinkedinIn } from 'react-icons/fa6'
 import { Mail } from 'lucide-react'
 
-const message = 'Olá, Andson! Conheci seu portfólio e gostaria de entrar em contato.'
+const whatsappNumber = '5584920002691'
+const whatsappMessage = 'Olá, Andson! Conheci seu portfólio e gostaria de entrar em contato.'
+export const whatsappContact = {
+  phoneNumber: whatsappNumber,
+  initialMessage: whatsappMessage,
+  url: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
+}
+
 export const contacts = [
   {
     label: 'E-mail',
@@ -20,7 +27,7 @@ export const contacts = [
   {
     label: 'WhatsApp',
     detail: 'Uma conversa começa aqui',
-    url: `https://wa.me/5584920002691?text=${encodeURIComponent(message)}`,
+    url: whatsappContact.url,
     icon: SiWhatsapp,
   },
   {

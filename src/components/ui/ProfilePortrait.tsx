@@ -90,7 +90,6 @@ export function ProfilePortrait() {
         type="button"
         className="portrait-button"
         aria-label={hasImage ? 'Girar foto de Andson Rocha' : 'Girar monograma de Andson Rocha'}
-        aria-describedby="portrait-hint"
         aria-busy="false"
         onClick={() => {
           if (motionPaused) {
@@ -138,12 +137,6 @@ export function ProfilePortrait() {
         </span>
       </button>
       <span className="portrait-coordinate">AR / 01</span>
-      <span className="portrait-cross" aria-hidden="true">
-        +
-      </span>
-      <span id="portrait-hint" className="portrait-hint">
-        Clique ou pressione Enter para girar
-      </span>
     </div>
   )
 }
