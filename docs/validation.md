@@ -340,3 +340,24 @@ Build total: 3.734.886 → 3.029.991 bytes. Recursos iniciais medidos: 1.156.390
 Penas, abertura, foto/halo/giro, tema em V, typing, faixas, navegação, dados, contatos/Instagram, relógio, contador e metadados foram preservados. Não houve publicação, push, alteração de segredos ou infraestrutura. Testes físicos, leitor de tela real, Safari/Firefox e validação de um futuro deployment permanecem fora desta execução local. Evidências em `.verification/audit/`, ignorada pelo Git.
 
 A varredura final de 154 arquivos (UTF-8/UTF-16LE), bundle e histórico inspecionado não encontrou o valor do token local; o endpoint administrativo também está ausente do cliente. Há uma pendência de limpeza local: a revisão automática rejeitou a exclusão dos diretórios temporários `.verification/audit-tools/` e `.verification/function-fixture-audit/` com “blocked by policy”, mesmo após conferir seus caminhos. Eles permanecem ignorados e fora do build, conforme detalhado no relatório.
+
+## Conteúdo comprovado e hierarquia de projetos — 10/11/2026
+
+Fontes e decisões em [content-sources.md](content-sources.md). Oito anexos lidos e renderizados, totalizando nove páginas; três cursos em Certificações e cinco registros em Eventos. JavaScript de 2023 abre a trajetória antes da graduação, seguido de Godot e ingresso na UFERSA em 2024.1. Datas das atividades não foram confundidas com emissão; Semana de Ciências registra 4 horas de atuação como membro, distintas das 30 horas totais do evento.
+
+Inspeção dos 13 repositórios públicos e READMEs disponíveis. Cinco destaques confirmados pelo usuário: Mitos e Raízes, Pedidos, Dashboard, Catálogo e Site institucional. Cinco trabalhos anteriores mantêm detalhes na lista compacta; quatro estudos aparecem somente por nome/link. Perfil, repositório vazio e versão sem documentação do jogo não foram tratados como novos destaques. O repositório privado permanece omitido. As quatro novas capas são composições SVG identificadas, sem alegação de serem screenshots.
+
+Oito PDFs presentes no build, acessíveis localmente por HTTP 200 com `application/pdf` e assinatura `%PDF-`. Sete cópias públicas têm CPF/matrícula, número e código de consulta removidos do conteúdo real, sem metadados/anexos embutidos. Comparação de texto normalizado preserva os outros dados, inclusive a página de programação de JavaScript. Revisão independente examinou também bytes e streams descomprimidos, sem encontrar os identificadores dos originais. Originais não alterados em Downloads. Validação remota não concluída: o SIGAA exige CAPTCHA; a interface orienta solicitar o original ao titular, sem publicar os dados de consulta.
+
+Correções encontradas nas validações: título da trajetória causava overflow em 320 px; datas dos eventos encostavam nos títulos no mobile; rótulo acessível dos links GitHub não continha seu texto visível. As três causas foram corrigidas e cobertas pelos testes/axe. Uma execução intermediária teve erros `ENOENT` de traces por duas instâncias Playwright usando a mesma pasta de resultados; a verificação final é executada em instância única. O verificador de produção também foi ajustado para resolver URLs relativas dos PDFs contra a URL da página.
+
+Inspeção visual de Projetos, Certificações, Trajetória e Eventos em 1440 e 390 px, nos dois temas, com capturas em `.verification/content-update/`. Novas capas examinadas no mobile em claro/escuro. Capturas de seções ocultam somente os controles fixos para não sobrepô-los ao conteúdo durante a captura longa. Os testes funcionais verificam os controles reais. Sem erros de página no roteiro visual. Verificações de largura incluem 320, 360, 390, 768, 1366, 1536 e 1920 px.
+
+- `npm run lint`: aprovado, sem avisos.
+- `npm run build`: aprovado, incluindo TypeScript e Vite.
+- `npm run format:check`: aprovado.
+- `npm run test:production`: aprovado; nove seções, cinco destaques, cinco detalhes preservados no arquivo, oito PDFs, imagens carregadas, CSP preservada, zero erros de console ou requisições externas no fluxo verificado.
+- `npm test -- --reporter=line`: **85 testes aprovados em 4,5 minutos**, em execução final isolada. Inclui axe nos dois temas, regressões de penas/Welcome/tema em V/contador e cinco novos testes de conteúdo, trajetória, documentos, curadoria, teclado e layout.
+- `git diff --check`: aprovado. Manifesto e lock de dependências não alterados.
+
+Não houve push, deploy, alteração de credenciais ou infraestrutura. Analytics, Instagram, Open Graph, penas, Welcome e tema em V permanecem no escopo da regressão. Limites: inspeção e testes locais em Edge/Chromium emulado; sem aparelho físico, Safari/Firefox ou auditoria humana com leitor de tela. O certificado da III JELEAC tem sobreposição de texto no próprio original; ela não foi disfarçada como documento corrigido. As informações estão transcritas no site.

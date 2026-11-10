@@ -1,7 +1,7 @@
-import { ArrowUpRight, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { events } from '../data/events'
 import { SectionHeading } from '../components/ui/SectionHeading'
-import { ExternalLink } from '../components/ui/ExternalLink'
+import { CertificateLinks } from '../components/ui/CertificateLinks'
 export function Events() {
   return (
     <section id="eventos" className="section events-section" tabIndex={-1}>
@@ -27,10 +27,12 @@ export function Events() {
                   {item.institution} · {item.location}
                 </p>
                 <p>{item.description}</p>
-                <ExternalLink href={item.certificate} className="text-link">
-                  Ver certificado
-                  <ArrowUpRight size={16} />
-                </ExternalLink>
+                {item.hours && (
+                  <p>
+                    {item.hours} horas certificadas · {item.participation}
+                  </p>
+                )}
+                <CertificateLinks pdf={item.pdf} validation={item.validation} />
               </details>
             </li>
           ))}

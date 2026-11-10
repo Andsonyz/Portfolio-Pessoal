@@ -15,15 +15,21 @@ export interface Project {
   liveUrl?: string
 }
 
-export interface Certification {
+export interface CertificateProof {
+  pdf?: string
+  validation?: {
+    issuedAt: string
+    kind: 'Participante' | 'Membro da equipe'
+  }
+}
+
+export interface Certification extends CertificateProof {
   id: string
   name: string
   institution: string
   date: string
   hours?: number
   category: string
-  pdf?: string
-  validationUrl?: string
 }
 
 export type MilestoneCategory =
@@ -36,7 +42,7 @@ export interface Milestone {
   category: MilestoneCategory
 }
 
-export interface PortfolioEvent {
+export interface PortfolioEvent extends CertificateProof {
   id: string
   name: string
   date: string
@@ -44,5 +50,5 @@ export interface PortfolioEvent {
   location: string
   description: string
   participation: string
-  certificate?: string
+  hours?: number
 }

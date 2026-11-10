@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680">
+  <rect width="900" height="680" fill="#eee"/>
+  <g fill="#151515">
+    <text x="72" y="100" font-size="15" letter-spacing="5" font-family="Arial, sans-serif">SITE INSTITUCIONAL</text>
+    <text x="66" y="328" font-size="230" letter-spacing="-12" font-family="Georgia, serif">IS</text>
+    <path d="M74 400H826" fill="none" stroke="#777"/>
+    <text x="72" y="474" font-size="51" font-family="Georgia, serif">Iara Santos</text>
+    <text x="74" y="522" font-size="18" letter-spacing="2" font-family="Arial, sans-serif">APRESENTAÇÃO PROFISSIONAL</text>
+    <text x="74" y="606" font-size="14" letter-spacing="2" font-family="Arial, sans-serif">REACT / TYPESCRIPT / INTERFACE RESPONSIVA</text>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680">
+  <rect width="900" height="680" fill="#eee"/>
+  <g fill="#151515" font-family="Arial, sans-serif">
+    <text x="72" y="100" font-size="15" letter-spacing="5">SISTEMA DE PEDIDOS</text>
+    <text x="65" y="310" font-size="140" font-weight="700" letter-spacing="-9">mesa.</text>
+    <text x="75" y="366" font-size="22" letter-spacing="2">DA MESA À COZINHA.</text>
+    <path d="M74 434H826" fill="none" stroke="#777"/>
+    <text x="74" y="487" font-size="23">salão</text>
+    <text x="360" y="487" font-size="23">cozinha</text>
+    <text x="713" y="487" font-size="23">caixa</text>
+    <text x="74" y="606" font-size="14" letter-spacing="2">REACT / TYPESCRIPT / NODE.JS / SQLITE</text>
+  </g>
+</svg>

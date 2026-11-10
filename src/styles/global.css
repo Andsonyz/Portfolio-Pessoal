@@ -1275,7 +1275,7 @@ details[open] summary svg {
 }
 .certificate-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 24px;
 }
 .certificate {
@@ -1288,6 +1288,7 @@ details[open] summary svg {
 .certificate h3 {
   font-size: 23px;
   margin: 16px 0;
+  overflow-wrap: anywhere;
 }
 .certificate > p {
   color: var(--muted);
@@ -1297,9 +1298,90 @@ details[open] summary svg {
 .certificate > .text-link {
   margin-right: 12px;
 }
+.certificate-links {
+  margin-block: 18px 24px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.certificate-validation {
+  margin-top: 14px;
+  color: var(--muted);
+  max-width: 580px;
+  overflow-wrap: anywhere;
+}
+.certificate-validation summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.certificate-validation p {
+  margin-block: 10px;
+}
+.certificate-validation dl > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.certificate-validation dt {
+  min-width: 80px;
+}
+.certificate-validation dd {
+  color: var(--fg);
+}
+.project-archive {
+  margin-top: clamp(56px, 8vw, 100px);
+}
+.project-archive h3 {
+  font-family: var(--font-display);
+  font-size: clamp(23px, 3vw, 32px);
+}
+.project-archive-intro {
+  margin: 12px 0 28px;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 520px;
+  line-height: 1.8;
+}
+.project-archive-list > li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 24px;
+  padding-block: 16px;
+  border-top: 1px solid var(--border);
+}
+.project-archive-name {
+  flex: 1 1 220px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.project-archive-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+.project-studies-heading {
+  margin-top: 40px;
+}
+.repository-studies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin-top: 16px;
+}
+.project-archive .text-link,
+.certificate-links .text-link {
+  min-height: 44px;
+}
 .timeline-item {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   gap: 30px;
 }
 .timeline-date {
@@ -1309,6 +1391,7 @@ details[open] summary svg {
   padding-top: 22px;
 }
 .timeline-details {
+  min-width: 0;
   border-top: 1px solid var(--border);
   position: relative;
 }
@@ -1328,6 +1411,14 @@ details[open] summary svg {
   gap: 24px;
   min-height: 115px;
   padding-block: 20px;
+}
+.timeline-details summary > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.timeline-details .certificate-validation summary {
+  min-height: 44px;
+  padding-block: 0;
 }
 .timeline-details summary .eyebrow {
   display: block;
@@ -1959,7 +2050,7 @@ details[open] summary svg {
     grid-template-columns: 1fr;
   }
   .timeline-item {
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 80px minmax(0, 1fr);
     gap: 22px;
   }
   .timeline-date {
@@ -1983,6 +2074,28 @@ details[open] summary svg {
   .events-section {
     grid-template-columns: 1fr;
     gap: 34px;
+  }
+  .event-timeline .timeline-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--border);
+  }
+  .event-timeline .timeline-date {
+    font-size: 14px;
+    line-height: 1.6;
+    letter-spacing: 0;
+    padding-top: 20px;
+    color: var(--muted);
+  }
+  .event-timeline .timeline-details {
+    border-top: 0;
+  }
+  .event-timeline .timeline-details::before {
+    display: none;
+  }
+  .event-timeline .timeline-details > summary {
+    min-height: 0;
+    padding-block: 16px 24px;
   }
   .events-empty {
     padding-left: 0;

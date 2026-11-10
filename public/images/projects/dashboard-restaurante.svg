@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680">
+  <rect width="900" height="680" fill="#eee"/>
+  <g fill="#151515" font-family="Arial, sans-serif">
+    <text x="72" y="100" font-size="15" letter-spacing="5">ANÁLISE / INTEGRAÇÃO</text>
+    <text x="65" y="300" font-size="140" font-weight="700" letter-spacing="-9">mesa.</text>
+    <text x="73" y="370" font-size="46" letter-spacing="-2">inteligência</text>
+    <path d="M74 434H826" fill="none" stroke="#777"/>
+    <text x="74" y="487" font-size="23">vendas</text>
+    <text x="360" y="487" font-size="23">estoque</text>
+    <text x="660" y="487" font-size="23">financeiro</text>
+    <text x="74" y="606" font-size="14" letter-spacing="2">DADOS CONECTADOS. CONTEXTOS DISTINTOS.</text>
+  </g>
+</svg>

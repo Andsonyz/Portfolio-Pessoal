@@ -1,4 +1,5 @@
 import { ProjectCarousel } from '../components/projects/ProjectCarousel'
+import { ProjectArchive } from '../components/projects/ProjectArchive'
 import { SectionHeading } from '../components/ui/SectionHeading'
 export function Projects() {
   return (
@@ -13,6 +14,7 @@ export function Projects() {
         <span className="muted-heading">saíram do papel.</span>
       </SectionHeading>
       <ProjectCarousel />
+      <ProjectArchive />
     </section>
   )
 }

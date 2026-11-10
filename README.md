@@ -20,7 +20,7 @@ npm run preview
 
 A prévia de produção usa **http://127.0.0.1:4173**. O resultado está em `dist/`. A integração com Vercel Web Analytics está preparada para o deployment; esta alteração não executa publicação ou push.
 
-Com a prévia de produção em execução, `npm run test:production` verifica o bundle gerado, os seis projetos, suas imagens, a política de segurança e a ausência de requisições a terceiros.
+Com a prévia de produção em execução, `npm run test:production` verifica o bundle gerado, os cinco projetos em destaque, suas imagens, os oito PDFs, a política de segurança e a ausência de requisições a terceiros.
 
 A [auditoria técnica de 26/10/2026](docs/repository-audit.md) registra inventário, limpeza, dependências, memória, segurança e comparações de tamanho. Para repetir o ensaio de carregamento e retenção de memória, com o preview ativo e sem outros testes/builds concorrentes, execute `node scripts/audit-runtime.mjs nome-do-ensaio`. Requer Microsoft Edge; os resultados locais ficam em `.verification/audit/runtime-nome-do-ensaio.json`. Esse ensaio não equivale ao Lighthouse, a métricas de campo ou a medição de memória da GPU.
 
@@ -71,7 +71,7 @@ src/
   types/               contratos de conteúdo
 public/
   images/profile/      foto opcional
-  images/projects/     capas dos projetos (SVG e PNG fornecido)
+  images/projects/     capas reais WebP e composições SVG identificadas
   images/feathers/     seis SVGs de penas fornecidos pelo proprietário
   documents/           currículo e documentos públicos opcionais
   icons/               favicon AR
@@ -84,17 +84,17 @@ docs/                  design, plano e relatório de validação
 
 Edite os arquivos de `src/data/`. Para conteúdo e aparência não é necessária outra conta; o contador usa a configuração server-side descrita abaixo.
 
-| Informação                                              | Arquivo             |
-| ------------------------------------------------------- | ------------------- |
-| Nome, título, texto sobre, formação e navegação         | `profile.ts`        |
-| Quatro interesses expansíveis de No meu radar           | `radar.ts`          |
-| Categorias e ícones de habilidades                      | `skills.ts`         |
-| Experiências acadêmicas e temas de inclusão             | `experiences.ts`    |
-| Seis projetos, imagens, detalhes e links opcionais      | `projects.ts`       |
-| Certificados                                            | `certifications.ts` |
-| Marcos da trajetória                                    | `timeline.ts`       |
-| Eventos                                                 | `events.ts`         |
-| E-mail, WhatsApp, GitHub, LinkedIn, Discord e Instagram | `contacts.ts`       |
+| Informação                                                        | Arquivo             |
+| ----------------------------------------------------------------- | ------------------- |
+| Nome, título, texto sobre, formação e navegação                   | `profile.ts`        |
+| Quatro interesses expansíveis de No meu radar                     | `radar.ts`          |
+| Categorias e ícones de habilidades                                | `skills.ts`         |
+| Experiências acadêmicas e temas de inclusão                       | `experiences.ts`    |
+| Projetos, curadoria, estudos, imagens, detalhes e links opcionais | `projects.ts`       |
+| Certificados                                                      | `certifications.ts` |
+| Marcos da trajetória                                              | `timeline.ts`       |
+| Eventos                                                           | `events.ts`         |
+| E-mail, WhatsApp, GitHub, LinkedIn, Discord e Instagram           | `contacts.ts`       |
 
 O período acadêmico é um dado informado, não calculado automaticamente. Atualize-o em `profile.ts` ao revisar sua apresentação. Não acrescente cargos, datas, certificados ou instituições sem confirmação. A experiência de acessibilidade em andamento está em `experiences.ts`, sem data inventada; a trajetória só recebe marcos com data confirmada.
 
@@ -118,15 +118,17 @@ Os SVGs atuais são **ilustrações conceituais**, não screenshots de sistemas.
 
 ### Certificados
 
-Adicione registros ao array vazio em `certifications.ts`, seguindo `Certification`: `id`, `name`, `institution`, `date`, `category`, `hours?`, `pdf?`, `validationUrl?`. Use apenas informações do certificado. Para PDFs, adicione o arquivo em `public/documents/` e indique seu caminho. O grid aparece automaticamente quando existem registros; links opcionais ausentes não aparecem.
+`certifications.ts` reúne três cursos comprovados pelos anexos. Use `Certification`: `id`, `name`, `institution`, `date`, `category`, `hours?`, `pdf?` e `validation?` (emissão e tipo de documento da UFERSA). Separe a data da atividade da emissão. PDFs públicos ficam em `public/documents/certificates/`; remova CPF/matrícula e códigos de consulta do conteúdo real do PDF, preserve o original fora de `public/` e identifique derivados como cópias. O site orienta solicitar o original ao titular para validação, evitando uma possível recuperação de dados pessoais pela consulta pública. O Intensivão de Claude não tem URL de validação fornecida.
 
 ### Eventos
 
-Adicione registros em `events.ts`, seguindo `PortfolioEvent`: `id`, `name`, `date`, `institution`, `location`, `description`, `participation`, `certificate?`. Eles aparecem como linha do tempo com itens expansíveis por clique ou teclado. Sem registros, permanece o estado vazio.
+`events.ts` reúne cinco registros comprovados, seguindo `PortfolioEvent`: `id`, `name`, `date`, `institution`, `location`, `description`, `participation`, `hours?`, `pdf?` e `validation?`. Os itens expandem por clique ou teclado. Na Semana de Ciências, 4 horas correspondem à atuação como membro e 30 horas ao evento; não somar nem trocar essas métricas.
 
 ### Trajetória
 
-Adicione marcos em `timeline.ts`, com `id`, `date`, `title`, `description` e `category`. Categorias aceitas: Formação, Projeto, Experiência, Evento, Certificação e Conquista. Apenas o ingresso em **2024.1** foi cadastrado inicialmente. As datas são textos editoriais; ordene os registros conscientemente.
+Adicione marcos em `timeline.ts`, com `id`, `date`, `title`, `description` e `category`. Categorias aceitas: Formação, Projeto, Experiência, Evento, Certificação e Conquista. A trajetória começa no curso de JavaScript em 2023, antes da faculdade, passa por Godot no mesmo ano e pelo ingresso em **2024.1**. As datas são textos editoriais; ordene os registros conscientemente.
+
+A [revisão de conteúdo e fontes](docs/content-sources.md) registra a adequação dos oito anexos e a análise dos 13 repositórios públicos. `featuredProjects` seleciona cinco destaques do catálogo `projects`; `otherProjects` deriva os demais, sem duplicar seus dados. A lista compacta mantém detalhes e links disponíveis, e `repositoryStudies` contém somente nomes e links dos estudos menores. Não adicione links privados nem presuma URLs de demonstração.
 
 ## Aparência e movimento
 

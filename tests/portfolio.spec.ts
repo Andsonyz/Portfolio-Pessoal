@@ -7,8 +7,8 @@ test('apresenta conteúdo confirmado e omite arquivos ainda não fornecidos', as
   await expect(page.getByRole('heading', { name: /^ANDSON\s*ROCHA\.$/ })).toBeVisible()
   await expect(page.locator('main > section')).toHaveCount(9)
   await expect(page.getByRole('link', { name: /baixar currículo/i })).toHaveCount(0)
-  await expect(page.getByText('Certificados a caminho.')).toBeVisible()
-  await expect(page.getByText('Novos encontros, em breve.')).toBeVisible()
+  await expect(page.locator('#certificacoes .certificate')).toHaveCount(3)
+  await expect(page.locator('#eventos .timeline-item')).toHaveCount(5)
   await expect(page.getByRole('img', { name: 'Andson Rocha', exact: true })).toBeVisible()
 })
 
@@ -20,12 +20,12 @@ test('carrossel responde a botões e teclado e mostra somente repositórios disp
   await expect(carousel.getByRole('heading', { name: 'Entre Mitos e Raízes' })).toBeVisible()
   await page.getByRole('button', { name: 'Próximo projeto' }).click()
   await expect(
-    carousel.getByRole('heading', { name: 'Ame-Pet — Sistema de Gerenciamento de Petshop' }),
+    carousel.getByRole('heading', { name: 'Sistema de Gerenciamento de Pedidos' }),
   ).toBeVisible()
   await carousel.focus()
   await page.keyboard.press('End')
   await expect(
-    carousel.getByRole('heading', { name: 'Acessibilidade Digital para deficientes visuais' }),
+    carousel.getByRole('heading', { name: 'Site Institucional — Iara Santos' }),
   ).toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(carousel.getByRole('heading', { name: 'Entre Mitos e Raízes' })).toBeVisible()
@@ -33,8 +33,10 @@ test('carrossel responde a botões e teclado e mostra somente repositórios disp
     'href',
     'https://github.com/Andsonyz/Projeto-Entre-Mitos-E-Ra-zes',
   )
-  await page.locator('.project-indicators button').nth(3).click()
-  await expect(carousel.getByRole('link', { name: /repositório/i })).toHaveCount(0)
+  await page
+    .getByRole('button', { name: 'Detalhes de SAPO — Achados e Perdidos UFERSA', exact: true })
+    .click()
+  await expect(page.getByRole('dialog').getByRole('link', { name: /repositório/i })).toHaveCount(0)
 })
 
 test('tema persiste, respeita movimento reduzido e suporta fallback', async ({ page }) => {
@@ -119,7 +121,7 @@ test('swipe horizontal troca o projeto e gesto vertical preserva o slide', async
     )
   })
   await expect(page.locator('.project-information h3')).toHaveText(
-    'Ame-Pet — Sistema de Gerenciamento de Petshop',
+    'Sistema de Gerenciamento de Pedidos',
   )
   await slide.evaluate((target) => {
     const touches = [
@@ -135,7 +137,7 @@ test('swipe horizontal troca o projeto e gesto vertical preserva o slide', async
     )
   })
   await expect(page.locator('.project-information h3')).toHaveText(
-    'Ame-Pet — Sistema de Gerenciamento de Petshop',
+    'Sistema de Gerenciamento de Pedidos',
   )
   await slide.evaluate((target) => {
     target.dispatchEvent(
@@ -152,7 +154,7 @@ test('swipe horizontal troca o projeto e gesto vertical preserva o slide', async
     )
   })
   await expect(page.locator('.project-information h3')).toHaveText(
-    'Ame-Pet — Sistema de Gerenciamento de Petshop',
+    'Sistema de Gerenciamento de Pedidos',
   )
 })
 

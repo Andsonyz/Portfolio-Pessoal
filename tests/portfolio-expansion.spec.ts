@@ -1,35 +1,33 @@
 import { expect, test } from '@playwright/test'
 
-test('seis projetos, repositórios públicos, acessibilidade e novas habilidades', async ({
-  page,
-}) => {
+test('projetos em destaque, arquivo público, acessibilidade e habilidades', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   await expect(page.locator('main > section')).toHaveCount(9)
-  await expect(page.locator('.project-indicators button')).toHaveCount(6)
+  await expect(page.locator('.project-indicators button')).toHaveCount(5)
   const titles = [
     'Entre Mitos e Raízes',
-    'Ame-Pet — Sistema de Gerenciamento de Petshop',
-    'Sistema Restaurante Dividão',
-    'SAPO — Achados e Perdidos UFERSA',
-    'Portfólio Pessoal',
-    'Acessibilidade Digital para deficientes visuais',
+    'Sistema de Gerenciamento de Pedidos',
+    'mesa. | inteligência',
+    'Catálogo de Filmes e Séries',
+    'Site Institucional — Iara Santos',
   ]
   for (const [index, title] of titles.entries()) {
     await page.locator('.project-indicators button').nth(index).click()
     await expect(page.locator('.project-information h3')).toHaveText(title)
     await expect(page.locator('.project-information')).toHaveAttribute(
       'aria-label',
-      `${index + 1} de 6`,
+      `${index + 1} de 5`,
     )
     const repository = page.locator('.project-information').getByRole('link', {
       name: 'Ver repositório',
     })
     const expectedRepositories: Record<number, string> = {
       0: 'https://github.com/Andsonyz/Projeto-Entre-Mitos-E-Ra-zes',
-      1: 'https://github.com/gabrdsp/Ame-Pet',
-      2: 'https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante',
-      4: 'https://github.com/Andsonyz/Portfolio-Pessoal',
+      1: 'https://github.com/Andsonyz/Gerenciamento-de-Pedidos',
+      2: 'https://github.com/Andsonyz/DashboardRestaurante',
+      3: 'https://github.com/Andsonyz/catalogo-filmes-series-api',
+      4: 'https://github.com/Andsonyz/SiteAdvogados',
     }
     if (index in expectedRepositories) {
       await expect(repository).toHaveAttribute('href', expectedRepositories[index]!)
@@ -37,16 +35,17 @@ test('seis projetos, repositórios públicos, acessibilidade e novas habilidades
     } else {
       await expect(repository).toHaveCount(0)
     }
-    if (index === 1 || index === 2) {
-      await expect(page.locator('.project-information')).toContainText(/colaborativo/i)
-      await expect(page.locator('.project-information')).toContainText(/terminal/i)
-      await expect(repository).toBeVisible()
-    }
-    if (index === 5) {
-      await expect(page.locator('.project-information')).toContainText('braille')
-      await expect(page.locator('.project-information')).not.toContainText('github.com')
-    }
   }
+  const archive = page.locator('.project-archive')
+  await expect(archive).toContainText('Ame-Pet — Sistema de Gerenciamento de Petshop')
+  await expect(archive).toContainText('Sistema Restaurante Dividão')
+  await expect(archive).toContainText('Acessibilidade Digital para deficientes visuais')
+  for (const repository of [
+    'https://github.com/gabrdsp/Ame-Pet',
+    'https://github.com/Mayconsmy/Sistema-de-Gerenciamento-de-Pedidos-para-Restaurante',
+    'https://github.com/Andsonyz/Portfolio-Pessoal',
+  ])
+    await expect(archive.locator(`a[href="${repository}"]`)).toBeVisible()
   await expect(page.locator('body')).not.toContainText('Sistema de Consultório/Clínica')
   await expect(page.locator('#experiencias')).toContainText(
     'Desenvolvimento de Software para Acessibilidade Digital',

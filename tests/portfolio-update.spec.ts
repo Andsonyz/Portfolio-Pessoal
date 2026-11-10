@@ -1,3 +1,4 @@
+import { projectTrigger } from './helpers/projects'
 import { expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
@@ -142,9 +143,8 @@ test('todos os projetos abrem detalhes, fecham por Escape e devolvem o foco ao a
     'Acessibilidade Digital para deficientes visuais',
   ]
 
-  for (const [index, title] of titles.entries()) {
-    await page.locator('.project-indicators button').nth(index).click()
-    const trigger = page.getByRole('button', { name: 'Um olhar mais de perto' })
+  for (const title of titles) {
+    const trigger = await projectTrigger(page, title)
     await trigger.click()
     const dialog = page.getByRole('dialog', { name: title })
     await expect(dialog).toBeVisible()
@@ -203,8 +203,7 @@ test('detalhes expandidos apresentam as informações fornecidas sem expor repos
   ]
 
   for (const item of cases) {
-    await page.locator('.project-indicators button').nth(item.index).click()
-    await page.getByRole('button', { name: 'Um olhar mais de perto' }).click()
+    await (await projectTrigger(page, item.title)).click()
     const dialog = page.getByRole('dialog', { name: item.title })
     await expect(dialog.getByRole('heading', { name: item.section })).toBeVisible()
     for (const text of item.content) await expect(dialog).toContainText(text)
@@ -258,8 +257,7 @@ test('equipe extensa e sexto projeto cabem em telas pequenas e rolam dentro do p
     { index: 1, title: 'Ame-Pet — Sistema de Gerenciamento de Petshop' },
     { index: 5, title: 'Acessibilidade Digital para deficientes visuais' },
   ]) {
-    await page.locator('.project-indicators button').nth(item.index).click()
-    await page.getByRole('button', { name: 'Um olhar mais de perto' }).click()
+    await (await projectTrigger(page, item.title)).click()
     const dialog = page.getByRole('dialog', { name: item.title })
     await expect(dialog).toBeVisible()
     const content = dialog.locator('.project-dialog-content')
@@ -396,8 +394,7 @@ test('painel anima entrada e saída e continua reabrindo após mudança de movim
 test('detalhes sem links permanecem roláveis por teclado no mobile', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 600 })
   await page.goto('/#projetos')
-  await page.locator('.project-indicators button').nth(3).click()
-  await page.getByRole('button', { name: 'Um olhar mais de perto' }).click()
+  await (await projectTrigger(page, 'SAPO — Achados e Perdidos UFERSA')).click()
   const dialog = page.getByRole('dialog', { name: 'SAPO — Achados e Perdidos UFERSA' })
   const content = dialog.getByRole('region', {
     name: 'Informações sobre SAPO — Achados e Perdidos UFERSA',

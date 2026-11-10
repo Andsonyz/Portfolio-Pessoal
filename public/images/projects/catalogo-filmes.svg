@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680">
+  <rect width="900" height="680" fill="#eee"/>
+  <g fill="#151515" font-family="Arial, sans-serif">
+    <text x="72" y="100" font-size="15" letter-spacing="5">CATÁLOGO / API</text>
+    <text x="66" y="277" font-size="96" font-weight="700" letter-spacing="-5">Filmes</text>
+    <text x="66" y="375" font-size="96" font-weight="700" letter-spacing="-5">e séries.</text>
+    <path d="M74 434H826" fill="none" stroke="#777"/>
+    <text x="74" y="487" font-size="23">gêneros</text>
+    <text x="360" y="487" font-size="23">títulos</text>
+    <text x="700" y="487" font-size="23">busca</text>
+    <text x="74" y="606" font-size="14" letter-spacing="2">PYTHON / DJANGO / REST FRAMEWORK</text>
+  </g>
+</svg>

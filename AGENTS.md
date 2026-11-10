@@ -18,6 +18,7 @@
 - Controles precisam funcionar por teclado, ter foco visível e área de toque adequada. Carrossel não pode capturar teclas de controles internos nem bloquear zoom por pinça.
 - Foto e currículo dependem de presença real no disco; Vite verifica em `vite.config.ts`, exigindo reinício/build após adicionar esses arquivos. A foto pública usa WebP lossless, com os caminhos PNG/JPG anteriores mantidos como alternativas opcionais.
 - Mantenha projetos, experiências, habilidades, faixas e rótulos do relógio centralizados em `src/data`. Não atribua datas aos novos projetos sem confirmação. Node.js é ambiente de execução, não linguagem independente.
+- A seleção de projetos deriva de `projects.ts`: cinco destaques no carrossel, outros trabalhos em lista com detalhes preservados e estudos menores somente por nome/link. Certificados e eventos usam datas das atividades, não da emissão; cópias públicas de certificados omitem CPF, matrícula e códigos de consulta. Originais ficam fora de `public/`.
 - O retrato gira no eixo Y com faces circulares; o halo permanece em camada separada. Faixas pausam por preferência do usuário, movimento reduzido e guia oculta. O relógio usa `America/Fortaleza` e horário real.
 
 ## Segurança

@@ -92,7 +92,7 @@ try {
   assert.equal(accessibilityArtResponse.status(), 200)
   assert.ok(accessibilityArtResponse.headers()['content-type'].includes('image/svg+xml'))
   const projectCount = await page.locator('.project-indicators button').count()
-  assert.equal(projectCount, 6)
+  assert.equal(projectCount, 5)
   for (let i = 0; i < projectCount; i++) {
     titles.push(await page.locator('.project-information h3').textContent())
     await page.locator('.project-art > img').evaluate((image) => image.decode())
@@ -106,8 +106,30 @@ try {
     await page.getByRole('button', { name: 'Próximo projeto' }).click()
   }
   assert.equal(new Set(titles).size, projectCount)
-  await page.locator('#trajetoria summary').click()
-  assert.equal(await page.locator('#trajetoria details').getAttribute('open'), '')
+  const archiveTriggers = await page.locator('.project-archive-actions button').all()
+  assert.equal(archiveTriggers.length, 5)
+  for (const trigger of archiveTriggers) {
+    await trigger.click()
+    const dialog = page.getByRole('dialog')
+    assert.equal(await dialog.isVisible(), true)
+    await dialog.locator('img').evaluate((image) => image.decode())
+    await page.keyboard.press('Escape')
+    assert.equal(await trigger.evaluate((element) => element === document.activeElement), true)
+  }
+  await page.locator('#trajetoria .timeline-details > summary').first().click()
+  assert.equal(await page.locator('#trajetoria .timeline-details').first().getAttribute('open'), '')
+  assert.equal(await page.locator('#certificacoes .certificate').count(), 3)
+  assert.equal(await page.locator('#eventos .timeline-item').count(), 5)
+  const proofLinks = await page.locator('a[href^="/documents/certificates/"]').all()
+  assert.equal(proofLinks.length, 8)
+  for (const link of proofLinks) {
+    const href = await link.getAttribute('href')
+    assert.ok(href)
+    const response = await page.request.get(new URL(href, page.url()).href)
+    assert.equal(response.status(), 200)
+    assert.ok(response.headers()['content-type'].includes('application/pdf'))
+    assert.equal((await response.body()).subarray(0, 5).toString(), '%PDF-')
+  }
   assert.equal(await page.getByRole('link', { name: /baixar currículo/i }).count(), 0)
   assert.deepEqual(errors, [])
   assert.deepEqual([...requests], ['http://127.0.0.1:4173'])
@@ -117,6 +139,8 @@ try {
         result: 'passed',
         sections: 9,
         projectCount,
+        otherProjectCount: archiveTriggers.length,
+        certificates: proofLinks.length,
         projectTitles: titles,
         theme: 'light',
         externalRequests: 0,

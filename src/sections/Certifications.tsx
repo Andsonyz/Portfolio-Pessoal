@@ -1,7 +1,7 @@
-import { ArrowUpRight, FileText } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { certifications } from '../data/certifications'
 import { SectionHeading } from '../components/ui/SectionHeading'
-import { ExternalLink } from '../components/ui/ExternalLink'
+import { CertificateLinks } from '../components/ui/CertificateLinks'
 export function Certifications() {
   return (
     <section id="certificacoes" className="section" tabIndex={-1}>
@@ -21,14 +21,7 @@ export function Certifications() {
                 {item.date}
                 {item.hours ? ` · ${item.hours} horas` : ''}
               </p>
-              <ExternalLink href={item.pdf} className="text-link">
-                Ver certificado
-                <ArrowUpRight size={16} />
-              </ExternalLink>
-              <ExternalLink href={item.validationUrl} className="text-link">
-                Validar
-                <ArrowUpRight size={16} />
-              </ExternalLink>
+              <CertificateLinks pdf={item.pdf} validation={item.validation} />
             </article>
           ))}
         </div>
