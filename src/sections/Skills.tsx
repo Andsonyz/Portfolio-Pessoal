@@ -12,26 +12,34 @@ export function Skills() {
         <br />
         <span className="muted-heading">à construção.</span>
       </SectionHeading>
-      <div className="skills-table">
-        {skills.map((group, index) => (
-          <div className="skill-row" key={group.category} data-reveal>
-            <div className="skill-category">
-              <span className="eyebrow">0{index + 1}</span>
-              <h3>{group.category}</h3>
-              <p>{group.note}</p>
-            </div>
-            <ul className="skill-items">
-              {group.items.map(({ name, icon: Icon, detail }) => (
-                <li key={name} title={detail}>
-                  <Icon aria-hidden="true" />
-                  <span>{name}</span>
-                  {detail && <span className="sr-only"> — {detail}</span>}
-                </li>
-              ))}
-            </ul>
+      {skills.map((group) => (
+        <section className="skills-group" aria-labelledby={`skills-${group.id}`} key={group.id}>
+          <div className="skills-group-heading" data-reveal>
+            <h3 id={`skills-${group.id}`}>{group.title}</h3>
+            {group.description && <p>{group.description}</p>}
           </div>
-        ))}
-      </div>
+          <div className="skills-table">
+            {group.categories.map((category, index) => (
+              <div className="skill-row" key={category.category} data-reveal>
+                <div className="skill-category">
+                  <span className="eyebrow">{String(index + 1).padStart(2, '0')}</span>
+                  <h4>{category.category}</h4>
+                  <p>{category.note}</p>
+                </div>
+                <ul className="skill-items">
+                  {category.items.map(({ name, icon: Icon, detail }) => (
+                    <li key={name} title={detail}>
+                      <Icon aria-hidden="true" />
+                      <span>{name}</span>
+                      {detail && <span className="sr-only"> — {detail}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
     </section>
   )
 }
