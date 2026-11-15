@@ -361,3 +361,24 @@ Inspeção visual de Projetos, Certificações, Trajetória e Eventos em 1440 e 
 - `git diff --check`: aprovado. Manifesto e lock de dependências não alterados.
 
 Não houve push, deploy, alteração de credenciais ou infraestrutura. Analytics, Instagram, Open Graph, penas, Welcome e tema em V permanecem no escopo da regressão. Limites: inspeção e testes locais em Edge/Chromium emulado; sem aparelho físico, Safari/Firefox ou auditoria humana com leitor de tela. O certificado da III JELEAC tem sobreposição de texto no próprio original; ela não foi disfarçada como documento corrigido. As informações estão transcritas no site.
+
+## Capas coloridas e apresentação do projeto jurídico — 15/11/2026
+
+Comparação com `origin/main` (`6dd352e`): Habilidades já incorporada; as alterações dos projetos estavam no commit `6e7d657` da branch anterior. Esse conteúdo foi reaplicado sobre `main` na branch local `review/projetos-capas-coloridas`, preservando a branch anterior e suas alterações.
+
+O projeto jurídico aparece como **Prática — Site de Advogados**, com descrição de estudo, sem o nome pessoal anterior. A antiga capa SVG foi removida. O repositório separado `SiteAdvogados` e seu link foram preservados por orientação explícita do usuário. As quatro imagens fornecidas viraram WebP de 1672 × 941 px, entre 174.020 e 233.150 bytes, identificadas como ilustrações conceituais. Carrossel e detalhes usam a mesma fonte de dados e preservam as cores; a proporção vem das dimensões da imagem. A interface continua monocromática.
+
+Adicionada `.gitattributes` para manter LF em arquivos de texto: o checkout do Windows convertia arquivos para CRLF e fazia `format:check` falhar sem diferenças de conteúdo.
+
+- `npm run lint`: aprovado.
+- `npm run build`: a primeira tentativa parou por falta de memória; aprovado com `RAYON_NUM_THREADS=1` definido somente no processo de execução.
+- `npm run format:check`: aprovado após normalizar os finais de linha.
+- A suíte no servidor de desenvolvimento foi interrompida por falta de recursos do navegador (`ERR_INSUFFICIENT_RESOURCES`) e perda do servidor local; não foi considerada aprovada.
+- A mesma suíte foi executada contra o build de produção com uma configuração temporária em `.verification/playwright.review.config.ts`: reaproveita a configuração existente, usa um worker e troca o servidor por `npm run preview -- --port 5173`. Foram 73 testes aprovados antes de o disco ficar sem espaço ao gravar o trace do teste de digitação (`ENOSPC`).
+- Retomada de `tests/update-3.spec.ts`, `tests/visitor-counter.spec.ts` e `tests/visitors-api.spec.ts` contra o mesmo build, com `--trace=off`: **25 testes aprovados**. Dois já haviam passado; no conjunto, os **96 testes distintos** foram executados e aprovados. Isso não representa uma execução única de 96 testes sem interrupção.
+
+As evidências incluem carrossel e detalhes com as quatro capas, ausência de cortes, conteúdo, teclado, temas, movimento reduzido, transição em V, foto, penas, navegação, ausência de overflow e auditoria axe. O verificador do contador usa respostas controladas; não comprova acesso atual ao Analytics de produção.
+
+Inspeção visual final do build de produção em 390 e 1440 px nos dois temas: quatro capas sem recorte, zero erros de página e sem overflow. Capturas em `.verification/project-preview/`. As quatro URLs locais de imagem retornaram HTTP 200 com `Content-Type: image/webp`. Essas verificações não comprovam publicação na Vercel.
+
+A remoção recursiva do diretório temporário `.verification/test-results-review/.playwright-artifacts-0` foi rejeitada pela revisão automática com `blocked by policy`. Uma limpeza mais restrita foi aceita: somente um trace temporário e os JPEGs de screencast dessa execução, preservando o relatório da falha e os arquivos do projeto. Nenhum push, deploy ou alteração no projeto separado foi executado nesta revisão.

@@ -134,6 +134,8 @@ A [revisão de conteúdo e fontes](docs/content-sources.md) registra a adequaç�
 
 Os tokens claro/escuro ficam no início de `src/styles/global.css`. Use apenas preto, branco e cinzas neutros. Tipografia: `fonts.css`. O monograma está em `Monogram.tsx` e no favicon `public/icons/monogram.svg`.
 
+As capas dos projetos preservam suas cores no carrossel e nos detalhes. As quatro artes fornecidas em novembro de 2026 usam WebP e são identificadas como ilustrações conceituais, sem representar capturas reais ou comprovar funcionalidades. Informe `imageWidth` e `imageHeight` em `projects.ts` para preservar a proporção. O projeto jurídico aparece como **Prática — Site de Advogados**; essa apresentação não altera o repositório separado `SiteAdvogados`.
+
 - Tema inicial escuro; preferência válida persistida em `localStorage` sob `ar-theme`. Armazenamento bloqueado não impede o uso.
 - Corte em V de **1,4 segundo**, aplicado ao snapshot completo com View Transitions. A geometria do próprio V forma o corte; não há uma linha DOM independente. Navegadores sem a API recebem a troca imediata. Movimento reduzido e pausa também usam troca imediata.
 - Durante o V, o navegador suspende cliques nos elementos capturados até terminar a transição. Essa limitação nativa dura 1,4 segundo; os controles voltam a responder ao final. A abertura Welcome tem comportamento separado e pode ser pulada imediatamente.
