@@ -24,9 +24,7 @@ test('carrossel responde a botões e teclado e mostra somente repositórios disp
   ).toBeVisible()
   await carousel.focus()
   await page.keyboard.press('End')
-  await expect(
-    carousel.getByRole('heading', { name: 'Site Institucional — Iara Santos' }),
-  ).toBeVisible()
+  await expect(carousel.getByRole('heading', { name: 'Prática — Site de Advogados' })).toBeVisible()
   await page.keyboard.press('ArrowRight')
   await expect(carousel.getByRole('heading', { name: 'Entre Mitos e Raízes' })).toBeVisible()
   await expect(carousel.getByRole('link', { name: /repositório/i })).toHaveAttribute(
