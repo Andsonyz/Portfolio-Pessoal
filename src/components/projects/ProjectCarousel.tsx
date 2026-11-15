@@ -90,6 +90,11 @@ export function ProjectCarousel() {
             alt={project.imageAlt}
             width={project.imageWidth ?? 900}
             height={project.imageHeight ?? 680}
+            style={
+              project.imageWidth && project.imageHeight
+                ? { aspectRatio: `${project.imageWidth} / ${project.imageHeight}` }
+                : undefined
+            }
             loading="lazy"
             className={project.id === 'mitos-raizes' ? 'mitos-cover' : undefined}
           />

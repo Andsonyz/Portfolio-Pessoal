@@ -928,7 +928,6 @@ main,
   width: 100%;
   aspect-ratio: 900/680;
   object-fit: cover;
-  filter: grayscale(1);
 }
 .project-art img.mitos-cover {
   aspect-ratio: 1070/622;
@@ -1096,7 +1095,6 @@ summary::-webkit-details-marker {
   width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: grayscale(1);
 }
 .project-dialog-content {
   min-width: 0;

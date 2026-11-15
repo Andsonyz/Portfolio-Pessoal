@@ -78,7 +78,7 @@ test('projetos têm cinco destaques e lista compacta sem links privados ou vazio
     'Sistema de Gerenciamento de Pedidos',
     'mesa. | inteligência',
     'Catálogo de Filmes e Séries',
-    'Site Institucional — Iara Santos',
+    'Prática — Site de Advogados',
   ]
   for (const [index, title] of titles.entries()) {
     await page.locator('.project-indicators button').nth(index).click()
